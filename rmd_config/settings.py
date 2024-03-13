@@ -38,7 +38,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'rmd_web',
-     #ALLAUTH
+    #ALLAUTH
     'allauth',
     'allauth.account',
     'allauth.socialaccount',

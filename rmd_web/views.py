@@ -13,4 +13,5 @@ from django.http import HttpResponseServerError
 
 # Create your views here.
 def profile(request):
+    print(request.user)
     return render(request, 'profile/profile.html')
