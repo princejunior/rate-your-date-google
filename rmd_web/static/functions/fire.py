@@ -23,13 +23,19 @@ def get_user_profile(email):
 #     print(user_profile)
 
 def create_user_profile(user_profile_data):
+    # social_media = [
+    #     user_profile_data['instagram'],
+    #     user_profile_data['facebook'], 
+    # ]
     doc_ref = db.collection('user_profiles').document(user_profile_data['email'])
     doc_ref.set({
-        'fullName': user_profile_data['fullName'],
-        'profilePicture': user_profile_data['profilePicture'],
-        'professionalBackground': user_profile_data['professionalBackground'],
+        'first_name': user_profile_data['first_name'],
+        'last_name': user_profile_data['last_name'],
+        'profile_picture': user_profile_data['profile_picture'],
+        'professional_background': user_profile_data['professional_background'],
+        'social_media': user_profile_data['social_media'],
         'interests': user_profile_data['interests'],
-        'privacySettings': user_profile_data['privacySettings']
+        'privacy_settings': user_profile_data['privacy_settings']
     })
 
 def edit_user_profile(user_id, updated_data):
