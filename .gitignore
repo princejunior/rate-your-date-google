@@ -6,3 +6,4 @@ rmd_web/static/functions/__pycache__
 venv
 .env
 env
+rmd_config/__pycache__
