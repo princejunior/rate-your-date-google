@@ -11,9 +11,9 @@ Profile
       <h1> Logged in as: {{ request.user.email}} </h>
       <h1> Logged in as: {{ request.user.id}} </h>
 
-<a href="{% url 'edit_profile' %}">Edit</a>
-
-<a href="{% url 'account_logout' %}">Logout</a>
-<a href="../google/login/?process=login">Signup</a>
-
-{% endblock content %}
+      <a href="{% url 'edit_user' %}">Edit</a> 
+      <a href="{% url 'account_logout' %}">Logout</a>
+      <a href="../google/login/?process=login">Signup</a>
+  </div>  
+       
+{% endblock %}
