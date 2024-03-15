@@ -27,10 +27,15 @@ def home(request):
 
 ######################################################################################################################
 # PROFILE_&_USER
+
 def profile(request):
     print(request.user)
     return render(request, 'profile/profile.html')
 
+def get_user_profile(request):
+    print(request.user)
+    return render(request, 'profile/profile.html')
+    
 def create_user(request):
     if request.method == 'POST':
         user_profile_data = {

@@ -21,6 +21,7 @@ from rmd_web import views
 urlpatterns = [
     path('', include('rmd_web.urls')),
     path('admin/', admin.site.urls),
+
     
     path('accounts/', include('allauth.urls')),
     path('accounts/profile/', views.profile, name="profile"),
