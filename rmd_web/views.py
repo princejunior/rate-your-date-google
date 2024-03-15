@@ -9,6 +9,8 @@ from django.shortcuts import render, redirect
 from .static.functions.fire import create_user_profile, edit_user_profile
 from .static.functions.friend_request import send_friend_request
 from .static.functions.search import search_users
+from .static.functions.friend_request import send_friend_request
+
 # from .static.functions.ads import
 # from .static.functions.friend_request import
 # from .static.functions.group_events import
@@ -99,6 +101,16 @@ def search_results(request):
     else:
         results = []
     return render(request, 'pages/search.html', {'results': results, 'query': query})
+# # views.py
+
+def send_friend_request_view(request):
+    if request.method == 'POST':
+        sender_id = request.user.id
+        receiver_id = request.POST.get('receiver_id')  # Assuming receiver_id is sent via POST
+        send_friend_request(sender_id, receiver_id)
+        # Add appropriate response or redirect here
+
+
 ######################################################################################################################
 # 
 
