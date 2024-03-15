@@ -6,8 +6,21 @@ db = firestore.client()
 ######################################################################################################################
 # PROFILE
 
-def get_user_profile():
-    return
+def get_user_profile(email):
+    doc_ref = db.collection('user_profiles').document(email)
+    doc = doc_ref.get()
+    if doc.exists:
+        return doc.to_dict()
+    else:
+        print(f"No user profile found for email: {email}")
+        return None
+
+# # Example usage:
+# user_email = 'example@example.com'
+# user_profile = get_user_profile(user_email)
+# if user_profile:
+#     print("User Profile:")
+#     print(user_profile)
 
 def create_user_profile(user_profile_data):
     doc_ref = db.collection('user_profiles').document(user_profile_data['email'])
