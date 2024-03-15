@@ -1,4 +1,13 @@
 fire/rate-my-date-fca52-cf894cb26c1d.json
+venv
+__pycache__/
+rmd_web/__pycache__
+.env
+env
+rmd_web/static/functions/__pycache__
+rmd_web/__pycache__
+fire/__pycache__
+fire/rate-my-date-fca52-cf894cb26c1d.json
 __pycache__/
 rmd_web/__pycache__
 rmd_web/__pycache__
