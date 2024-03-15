@@ -1,0 +1,20 @@
+{% extends "navbar.html" %}
+{% load static %}
+{% block title %}
+Create User Profile
+{% endblock %}
+
+
+{% block content %}
+<h1>Create User Profile</h1>
+<form method="post">
+    {% csrf_token %}
+    Email: <input type="text" name="email"><br>
+    Full Name: <input type="text" name="full_name"><br>
+    Profile Picture: <input type="text" name="profile_picture"><br>
+    Professional Background: <input type="text" name="professional_background"><br>
+    Interests: <input type="text" name="interests"><br>
+    Email Visibility: <input type="text" name="email_visibility"><br>
+    <button type="submit">Submit</button>
+</form>
+{% endblock %}

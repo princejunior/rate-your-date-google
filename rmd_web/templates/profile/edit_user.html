@@ -1,0 +1,19 @@
+{% extends "navbar.html" %}
+
+{% block title %}
+Edit User Profile
+{% endblock %}
+
+
+{% block content %}
+<h1>Edit User Profile</h1>
+<form method="post">
+    {% csrf_token %}
+    Full Name: <input type="text" name="full_name"><br>
+    Profile Picture: <input type="text" name="profile_picture"><br>
+    Professional Background: <input type="text" name="professional_background"><br>
+    Interests: <input type="text" name="interests"><br>
+    Email Visibility: <input type="text" name="email_visibility"><br>
+    <button type="submit">Submit</button>
+</form>
+{% endblock %}
