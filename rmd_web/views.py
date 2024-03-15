@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect
 # STATIC.FUNCTIONS
 from .static.functions.fire import create_user_profile, edit_user_profile
 from .static.functions.friend_request import send_friend_request
-
+from .static.functions.search import search_users
 # from .static.functions.ads import
 # from .static.functions.friend_request import
 # from .static.functions.group_events import
@@ -34,41 +34,56 @@ def profile(request):
     print(request.user)
     return render(request, 'profile/profile.html')
 
-def get_user_profile(request):
+def get_individuals_profile(request):
     print(request.user)
     return render(request, 'profile/profile.html')
     
 def create_user(request):
+    email = request.user.email
+    social_media = [
+       request.POST.get('instagram'),
+       request.POST.get('facebook'),
+    ]
     if request.method == 'POST':
         user_profile_data = {
-            'email': request.POST.get('email'),
-            'fullName': request.POST.get('full_name'),
-            'profilePicture': request.POST.get('profile_picture'),
-            'professionalBackground': request.POST.getlist('professional_background'),
+            'email': email,
+            'first_name': request.POST.get('first_name'),
+            'last_name': request.POST.get('last_name'),
+            'profile_picture': request.POST.get('profile_picture'),
+            'professional_background': request.POST.getlist('professional_background'),
+            'social_media': social_media,
             'interests': request.POST.getlist('interests'),
-            'privacySettings': {'email_visibility': request.POST.get('email_visibility')}
+            'privacy_settings': {'email_visibility': request.POST.get('email_visibility')}
         }
         create_user_profile(user_profile_data)
         return redirect('profile_created')  # Redirect to a page indicating profile creation success
     return render(request, 'profile/create_user.html')
 
-def edit_user(request, email):
+def edit_user(request):
+    print(request.user.id)
+    social_media = [
+       request.POST.get('instagram'),
+       request.POST.get('facebook'),
+    ]
+    user_id = request.user.id
     if request.method == 'POST':
         updated_data = {
-            'fullName': request.POST.get('full_name'),
-            'profilePicture': request.POST.get('profile_picture'),
-            'professionalBackground': request.POST.getlist('professional_background'),
+            'first_name': request.POST.get('first_name'),
+            'last_name': request.POST.get('last_name'),
+            'profile_picture': request.POST.get('profile_picture'),
+            'professional_background': request.POST.getlist('professional_background'),
+            'social_media': social_media,
             'interests': request.POST.getlist('interests'),
-            'privacySettings': {'email_visibility': request.POST.get('email_visibility')}
+            'privacy_settings': {'email_visibility': request.POST.get('email_visibility')}
         }
-        edit_user_profile(email, updated_data)
+        edit_user_profile(user_id, updated_data)
         return redirect('profile_edited')  # Redirect to a page indicating profile edit success
     return render(request, 'profile/edit_user.html')
 
 ######################################################################################################################
 
 ######################################################################################################################
-# # views.py
+# FUNCTIONALITY PAGES
 
 def send_friend_request_view(request):
     if request.method == 'POST':
@@ -77,7 +92,13 @@ def send_friend_request_view(request):
         send_friend_request(sender_id, receiver_id)
         # Add appropriate response or redirect here
 
-
+def search_results(request):
+    query = request.GET.get('query')
+    if query:
+        results = search_users(query)
+    else:
+        results = []
+    return render(request, 'pages/search.html', {'results': results, 'query': query})
 ######################################################################################################################
 # 
 
