@@ -186,26 +186,26 @@ def get_group_date(group_date_id):
         print(f"No group date found with ID: {group_date_id}")
         return None
 
-# Example usage:
-group_date_data = {
-    'creator_id': 'example_creator_id',
-    'details': {
-        'date': '2024-03-20',
-        'time': '15:00',
-        'location': 'Central Park',
-        'interests': ['Hiking', 'Picnic']
-    },
-    'maxParticipants': 10,
-    'participants': ['user1_id', 'user2_id'],
-    'privacy': 'public',
-    'status': 'planned'
-}
+# # Example usage:
+# group_date_data = {
+#     'creator_id': 'example_creator_id',
+#     'details': {
+#         'date': '2024-03-20',
+#         'time': '15:00',
+#         'location': 'Central Park',
+#         'interests': ['Hiking', 'Picnic']
+#     },
+#     'maxParticipants': 10,
+#     'participants': ['user1_id', 'user2_id'],
+#     'privacy': 'public',
+#     'status': 'planned'
+# }
 
-group_date_id = add_group_date(group_date_data)
-print("Group date added with ID:", group_date_id)
+# group_date_id = add_group_date(group_date_data)
+# print("Group date added with ID:", group_date_id)
 
-retrieved_group_date = get_group_date(group_date_id)
-if retrieved_group_date:
-    print("Retrieved Group Date:")
-    print(retrieved_group_date)
+# retrieved_group_date = get_group_date(group_date_id)
+# if retrieved_group_date:
+#     print("Retrieved Group Date:")
+#     print(retrieved_group_date)
 ######################################################################################################################
