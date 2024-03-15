@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+import firebase_admin
+from firebase_admin import credentials
 
 # Load environment variables from .env file
 from dotenv import load_dotenv
@@ -137,6 +139,14 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+######################################################################################################################
+# GOOGLE_&_ALLAUTH
+
+# Initialize Firebase Admin SDK
+cred = credentials.Certificate("fire/rate-my-date-fca52-cf894cb26c1d.json")
+firebase_admin.initialize_app(cred)
+
 # ALLAUTH
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
@@ -168,3 +178,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 ACCOUNT_AUTHENTICATION_METHOD = 'EMAIL'
 ACCOUNT_EMAIL_REQUIRED = True
+######################################################################################################################
+
