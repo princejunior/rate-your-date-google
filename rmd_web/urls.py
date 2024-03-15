@@ -8,8 +8,8 @@ urlpatterns = [
 ######################################################################################################################
 # PROFILE
     path('profile/', views.profile, name="profile"),
-    path('create_user/', views.create_user, name="create_user"),
-    path('edit_user/', views.edit_user, name="edit_user"),
+    path('create_profile/', views.create_user, name="create_profile"),
+    path('edit_profile/', views.edit_user, name="edit_profile"),
     path('view_profile/', views.get_individuals_profile, name="view_profile"),
 
     
