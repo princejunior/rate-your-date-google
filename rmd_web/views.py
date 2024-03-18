@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 
 ######################################################################################################################
 # STATIC.FUNCTIONS
-from .static.functions.fire import create_user_profile, edit_user_profile
+from .static.functions.fire import create_user_profile, edit_user_profile, image_upload
 from .static.functions.friend_request import send_friend_request
 from .static.functions.search import search_users
 from .static.functions.friend_request import send_friend_request
@@ -19,9 +19,26 @@ from .static.functions.search import search_users
 # from .static.functions.post import
 
 ######################################################################################################################
+def upload_image(request):
+       if request.method == 'POST':
+           # Get the uploaded image from the request
+            uploaded_image = request.FILES['image']
+            image_upload(uploaded_image)
+    
+        #    # Initialize Firebase
+        #    cred = credentials.Certificate('path/to/serviceAccountKey.json')  # Replace with the path to your service account key JSON file
+        #    firebase_admin.initialize_app(cred, {
+        #        'storageBucket': 'your-bucket-name.appspot.com' # Replace with your Firebase Storage bucket name
+        #    })
+           # Upload Image
+        #    bucket = storage.bucket()
+        #    blob = bucket.blob('path/to/' + uploaded_image.name)  # Replace with the desired path and name for the uploaded image in Firebase Storage
+        #    blob.upload_from_file(uploaded_image)
+
+        #    print('Image uploaded successfully')
 
 
-
+       return render(request, 'image_upload.html')
 ######################################################################################################################
 # HOME
 def home(request):

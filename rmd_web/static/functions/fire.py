@@ -1,5 +1,6 @@
 import firebase_admin
-from firebase_admin import credentials, firestore
+from firebase_admin import credentials, firestore, storage
+import datetime
 # Initialize Firebase Admin SDK
 db = firestore.client()
 
@@ -23,6 +24,7 @@ def get_user_profile(email):
 #     print(user_profile)
 
 def create_user_profile(user_profile_data):
+    image_url = image_upload(user_profile_data['profile_picture'])
     # social_media = [
     #     user_profile_data['instagram'],
     #     user_profile_data['facebook'], 
@@ -31,7 +33,8 @@ def create_user_profile(user_profile_data):
     doc_ref.set({
         'first_name': user_profile_data['first_name'],
         'last_name': user_profile_data['last_name'],
-        'profile_picture': user_profile_data['profile_picture'],
+        'profile_picture': image_url,
+        # 'profile_picture': user_profile_data['profile_picture'],
         'professional_background': user_profile_data['professional_background'],
         'social_media': user_profile_data['social_media'],
         'interests': user_profile_data['interests'],
@@ -136,7 +139,7 @@ def get_date_review(date_review_id):
 def add_feedback(feedback_data):
     doc_ref = db.collection('feedback').document()
     doc_ref.set({
-        'fromUserId': feedback_data['fromUserId'],
+        'from_user_id': feedback_data['fromUserId'],
         'toUserId': feedback_data['toUserId'],
         'content': feedback_data['content'],
         'timestamp': feedback_data['timestamp']
@@ -214,4 +217,37 @@ def get_group_date(group_date_id):
 # if retrieved_group_date:
 #     print("Retrieved Group Date:")
 #     print(retrieved_group_date)
+######################################################################################################################
+
+######################################################################################################################
+# UPLOAD_IMAGE
+
+def image_upload(uploaded_image):
+    bucket = storage.bucket()
+    blob = bucket.blob('profile/' + uploaded_image.name)  # Replace with the desired path and name for the uploaded image in Firebase Storage
+    
+    # blob = bucket.blob('path/to/' + uploaded_image.name)  # Replace with the desired path and name for the uploaded image in Firebase Storage
+    blob.upload_from_file(uploaded_image)
+    # blob = bucket.blob('path/to/image.jpg')  # Replace with the desired path and name for the image in Firebase Storage
+    # blob.upload_from_filename('path/to/local/image.jpg')  # Replace with the actual path of the local image file
+    download_url = blob.generate_signed_url(datetime.timedelta(seconds=300), method='GET')
+
+    print(f"Image uploaded successfully. Download URL: {download_url}")
+    return download_url
+  
+######################################################################################################################
+
+######################################################################################################################
+# 
+
+######################################################################################################################
+
+######################################################################################################################
+# 
+
+######################################################################################################################
+
+######################################################################################################################
+# 
+
 ######################################################################################################################
