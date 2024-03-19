@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 
 ######################################################################################################################
 # STATIC.FUNCTIONS
-from .static.functions.fire import create_user_profile, edit_user_profile, image_upload
+from .static.functions.fire import get_user_profile, create_user_profile, edit_user_profile, image_upload
 from .static.functions.friend_request import send_friend_request
 from .static.functions.search import search_users
 # from .static.functions.ads import
