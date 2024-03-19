@@ -247,6 +247,97 @@ def image_upload(uploaded_image):
 ######################################################################################################################
 
 ######################################################################################################################
+# POSTS
+
+# Function to add a post to Firestore
+def add_post(user_id, target_user_id, post_content, post_image_url=None):
+    # Create a new document in the "posts" collection
+    doc_ref = db.collection("posts").document()
+    
+    # Define the data for the post
+    post_data = {
+        "user_id": user_id,
+        "target_user_id": target_user_id,
+        "post_content": post_content,
+        "post_image_url": post_image_url,
+        "likes": 0,
+        "dislikes": 0,
+        "comments": [],
+        "timestamp": firestore.SERVER_TIMESTAMP
+    }
+    
+    # Set the data for the document
+    doc_ref.set(post_data)
+    print("Post added successfully")
+
+# Function to add a comment to a post
+def add_comment(post_id, user_id, target_user_id, comment_content):
+    # Reference the post document
+    post_ref = db.collection("posts").document(post_id)
+    
+    # Get the current comments list
+    post_data = post_ref.get().to_dict()
+    comments = post_data.get("comments", [])
+    
+    # Add the new comment
+    new_comment = {
+        "user_id": user_id,
+        "target_user_id": target_user_id,
+        "comment_content": comment_content,
+        "timestamp": firestore.SERVER_TIMESTAMP
+    }
+    comments.append(new_comment)
+    
+    # Update the comments field in the document
+    post_ref.update({"comments": comments})
+    print("Comment added successfully")
+
+# Function to like a post
+def like_post(post_id, user_id, target_user_id):
+    # Reference the post document
+    post_ref = db.collection("posts").document(post_id)
+    
+    # Atomically increment likes by 1
+    post_ref.update({"likes": firestore.Increment(1)})
+    
+    # Add the user to the list of users who liked the post
+    post_ref.collection("likes").add({"user_id": user_id, "target_user_id": target_user_id})
+    
+    print("Post liked")
+
+# Function to dislike a post
+def dislike_post(post_id, user_id, target_user_id):
+    # Reference the post document
+    post_ref = db.collection("posts").document(post_id)
+    
+    # Atomically increment dislikes by 1
+    post_ref.update({"dislikes": firestore.Increment(1)})
+    
+    # Add the user to the list of users who disliked the post
+    post_ref.collection("dislikes").add({"user_id": user_id, "target_user_id": target_user_id})
+    
+    print("Post disliked")
+
+    
+    
+######################################################################################################################
+
+######################################################################################################################
+# 
+
+######################################################################################################################
+
+######################################################################################################################
+# 
+
+######################################################################################################################
+
+######################################################################################################################
+# 
+
+######################################################################################################################
+
+######################################################################################################################
 # 
 
 ######################################################################################################################
