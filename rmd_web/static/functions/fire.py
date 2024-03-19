@@ -750,6 +750,7 @@ def get_user_events(user_event_ids):
 # UPLOAD_IMAGE
 
 def image_upload(uploaded_image):
+    print(uploaded_image)
     bucket = storage.bucket()
     blob = bucket.blob('profile/' + uploaded_image.name)  # Replace with the desired path and name for the uploaded image in Firebase Storage
     
@@ -757,7 +758,15 @@ def image_upload(uploaded_image):
     blob.upload_from_file(uploaded_image)
     # blob = bucket.blob('path/to/image.jpg')  # Replace with the desired path and name for the image in Firebase Storage
     # blob.upload_from_filename('path/to/local/image.jpg')  # Replace with the actual path of the local image file
-    download_url = blob.generate_signed_url(datetime.timedelta(seconds=300), method='GET')
+    # download_url = blob.generate_signed_url(datetime.timedelta(seconds=300), method='GET')
+
+
+    # Set expiration time to datetime.max
+    expiration_time = datetime.datetime.max
+
+    # Generate signed URL with expiration time set to datetime.max
+    download_url = blob.generate_signed_url(expiration_time, method='GET')
+
 
     print(f"Image uploaded successfully. Download URL: {download_url}")
     return download_url
