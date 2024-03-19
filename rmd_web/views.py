@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.core.exceptions import MultipleObjectsReturned
-from django.http import HttpResponseServerError
-
+from django.http import JsonResponse, HttpResponseServerError
 from django.shortcuts import render, redirect
 
 ######################################################################################################################
@@ -52,6 +51,7 @@ def home(request):
 
 def profile(request):
     print("User's profile" ,request.user)
+    
     context = {
        'user_information': get_user_profile(request.user.email)
     }
@@ -171,7 +171,60 @@ def search_results(request):
         results = []
     return render(request, 'pages/search.html', {'results': results, 'query': query})
 ######################################################################################################################
-# 
+# POSTS
+
+def create_post(request, username):
+    if request.method == 'POST':
+        post_data = {
+            'email': email,
+            'first_name': request.POST.get('first_name'),
+            'last_name': request.POST.get('last_name'),
+            'profile_picture': request.POST.get('profile_picture'),
+            'professional_background': request.POST.getlist('professional_background'),
+            'social_media': social_media,
+            'interests': request.POST.getlist('interests'),
+            'privacy_settings': {'email_visibility': request.POST.get('email_visibility')}
+        }
+        create_post(post_data)
+        return redirect('profile_created')  # Redirect to a page indicating profile creation success
+    
+    
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            content = form.cleaned_data['content']
+            user_id = request.user.id  # Assuming you have user authentication set up properly
+
+            # Store the post in Firestore
+            db = firestore.client()
+            doc_ref = db.collection('posts').document()
+            doc_ref.set({
+                'user_id': user_id,
+                'content': content
+            })
+
+            return redirect('profile', username=username)
+    else:
+        form = PostForm()
+    return render(request, 'create_post.html', {'form': form})
+
+def add_comment(request, post_id):
+    # Implement adding a comment
+    # Retrieve the post using post_id
+    # Add a comment to the post
+    return JsonResponse({"success": True})
+
+def like_post(request, post_id):
+    # Implement liking a post
+    # Retrieve the post using post_id
+    # Increment the likes count for the post
+    return JsonResponse({"success": True})
+
+def dislike_post(request, post_id):
+    # Implement disliking a post
+    # Retrieve the post using post_id
+    # Increment the dislikes count for the post
+    return JsonResponse({"success": True})
 
 ######################################################################################################################
 

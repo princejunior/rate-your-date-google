@@ -40,9 +40,34 @@ Profile
           {% endfor %}
       </ul>
     <li><strong>Profile Picture:</strong> 
-        <br>
-        <img src="{{context.user_information.profile_picture}}" alt="Profile Picture">
+          <img
+            src="{{context.user_information.profile_picture}}"
+            class="w3-circle"
+            style="height: 106px; width: 106px"
+            alt="Profile Picture"
+        />
+        
+        {% comment %} <img src="{{context.user_information.profile_picture}}" alt="Profile Picture"> {% endcomment %}
     </li>
-    
 </ul>
+<div class="post">
+  <h2>{{ post.title }}</h2>
+  <p>{{ post.content }}</p>
+  <p>Likes: {{ post.likes }}</p>
+  <p>Dislikes: {{ post.dislikes }}</p>
+  <form action="{% url 'add_comment' post.id %}" method="post">
+      {% csrf_token %}
+      <label for="comment_content">Add Comment:</label><br>
+      <textarea id="comment_content" name="comment_content"></textarea><br>
+      <button type="submit">Add Comment</button>
+  </form>
+  <form action="{% url 'like_post' post.id %}" method="post">
+      {% csrf_token %}
+      <button type="submit">Like</button>
+  </form>
+  <form action="{% url 'dislike_post' post.id %}" method="post">
+      {% csrf_token %}
+      <button type="submit">Dislike</button>
+  </form>
+</div>
 {% endblock content %}

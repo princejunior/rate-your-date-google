@@ -23,12 +23,14 @@ Profile
               <div class="w3-container">
                 <h4 class="w3-center">My Profile</h4>
                 <p class="w3-center">
-                  <img
-                    src="{{context.user_information.profile_picture}}"
-                    class="w3-circle"
-                    style="height: 106px; width: 106px"
-                    alt="Avatar"
-                  />
+                  <a href="{% url 'profile' %}">
+                    <img
+                      src="{{context.user_information.profile_picture}}"
+                      class="w3-circle"
+                      style="height: 106px; width: 106px"
+                      alt="Avatar"
+                    />
+                  </a>
                 </p>
                 <hr />
                 <p>
