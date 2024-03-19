@@ -13,19 +13,3 @@ Upload Image
     <input type="submit" value="Upload Image">
 </form>
 {% endblock %}
-
-
-{% comment %} {% extends "navbar.html" %} {% endcomment %}
-
-{% block title %}
-Upload Image
-{% endblock %}
-
-
-{% block content %}
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    <input type="file" name="image">
-    <input type="submit" value="Upload Image">
-</form>
-{% endblock %}
