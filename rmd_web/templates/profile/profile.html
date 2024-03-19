@@ -8,12 +8,41 @@ Profile
 {% block content %}
   <div class="w3-container w3-content" style="max-width: 1400px; margin-top: 80px">
     <h1> Logged in as: {{ request.user.username}} </h>
-      <h1> Logged in as: {{ request.user.email}} </h>
-      <h1> Logged in as: {{ request.user.id}} </h>
+    <h1> Logged in as: {{ request.user.email}} </h>
+    <h1> Logged in as: {{ request.user.id}} </h>
+        
 
 <a href="{% url 'edit_profile' %}">Edit</a>
 
 <a href="{% url 'account_logout' %}">Logout</a>
 <a href="../google/login/?process=login">Signup</a>
+<br>
+{% comment %} <h1> User Information: {{ context.user_information }} </h1> {% endcomment %}
 
+<h1>User Information</h1>
+<ul>
+    <li><strong>First Name:</strong> {{context.user_information.first_name}}</li>
+    <li><strong>Last Name:</strong> {{context.user_information.last_name}}</li>
+    <li><strong>Email:</strong> {{context.user_information.email}}</li>
+    <li><strong>Email Visibility:</strong> {{context.user_information.email_visability}}</li>
+    <li><strong>Professional Background:</strong> {{context.user_information.profession_background}}</li>
+    <li><strong>Social Media:</strong> 
+      <ul>
+        {% for platform in context.user_information.social_media %}
+            <li>{{ platform }}</li>
+        {% endfor %}
+    </ul>
+    </li>
+    <li><strong>Interests:</strong></li>
+      <ul>
+          {% for platform in context.user_information.interests %}
+            <li>{{ platform }}</li>
+          {% endfor %}
+      </ul>
+    <li><strong>Profile Picture:</strong> 
+        <br>
+        <img src="{{context.user_information.profile_picture}}" alt="Profile Picture">
+    </li>
+    
+</ul>
 {% endblock content %}

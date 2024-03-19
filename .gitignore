@@ -5,3 +5,4 @@ rmd_web/__pycache__
 rmd_web/static/functions/__pycache__
 venv
 .env
+env
