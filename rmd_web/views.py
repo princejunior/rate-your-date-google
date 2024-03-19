@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 
 ######################################################################################################################
 # STATIC.FUNCTIONS
-from .static.functions.fire import create_user_profile, edit_user_profile, image_upload
+from .static.functions.fire import get_user_profile, create_user_profile, edit_user_profile, image_upload
 from .static.functions.friend_request import send_friend_request
 from .static.functions.search import search_users
 # from .static.functions.ads import
@@ -41,15 +41,22 @@ def upload_image(request):
 # HOME
 def home(request):
     print(request.user)
-    return render(request, 'home.html')
+    context = {
+       'user_information': get_user_profile(request.user.email)
+    }
+    return render(request, 'home.html', {'context': context})
 ######################################################################################################################
 
 ######################################################################################################################
 # PROFILE_&_USER
 
 def profile(request):
-    print(request.user)
-    return render(request, 'profile/profile.html')
+    print("User's profile" ,request.user)
+    context = {
+       'user_information': get_user_profile(request.user.email)
+    }
+    print(context)
+    return render(request, 'profile/profile.html', {'context': context})
 
 def get_individuals_profile(request):
     print(request.user)
@@ -78,23 +85,41 @@ def create_user(request):
 
 def edit_user(request):
     print(request.user.id)
-    social_media = [
-       request.POST.get('instagram'),
-       request.POST.get('facebook'),
-    ]
-    user_id = request.user.id
+    print(request.user.email)
+    
+    
+    user_id = request.user.email
+    # user_id = str(request.user.id)
+
     if request.method == 'POST':
+        social_media = [
+            request.POST.get('instagram'),
+            request.POST.get('facebook'),
+        ]
+        # print('Social Media', social_media)
+        # Retrieve the profile picture from request.FILES
+        profile_image = request.FILES.get('profile_picture')
+        # Check if a profile picture was uploaded
+        # print("profile_image", profile_image)
+        
+        if profile_image:
+            profile_image_url = image_upload(profile_image)
+            
+        else:
+            profile_image_url = None  # Or provide a default URL if needed
+
         updated_data = {
             'first_name': request.POST.get('first_name'),
             'last_name': request.POST.get('last_name'),
-            'profile_picture': request.POST.get('profile_picture'),
+            # 'profile_picture': request.POST.get('profile_picture'),
+            'profile_picture': profile_image_url,
             'professional_background': request.POST.getlist('professional_background'),
             'social_media': social_media,
             'interests': request.POST.getlist('interests'),
             'privacy_settings': {'email_visibility': request.POST.get('email_visibility')}
         }
         edit_user_profile(user_id, updated_data)
-        return redirect('profile_edited')  # Redirect to a page indicating profile edit success
+        return redirect('profile')  # Redirect to a page indicating profile edit success
     return render(request, 'profile/edit_user.html')
 
 ######################################################################################################################
