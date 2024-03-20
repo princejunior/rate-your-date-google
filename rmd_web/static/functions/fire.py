@@ -750,26 +750,16 @@ def get_user_events(user_event_ids):
 # UPLOAD_IMAGE
 
 def image_upload(uploaded_image,folder):
-    print(uploaded_image)
+    # print('upload_image',uploaded_image)
+    # print('upload_image.name',uploaded_image.name)
+    
     bucket = storage.bucket()
     blob = bucket.blob(folder+ '/' + uploaded_image.name)  # Replace with the desired path and name for the uploaded image in Firebase Storage
-    
-    # blob = bucket.blob('profile/' + uploaded_image.name)  # Replace with the desired path and name for the uploaded image in Firebase Storage
-    
-    # blob = bucket.blob('path/to/' + uploaded_image.name)  # Replace with the desired path and name for the uploaded image in Firebase Storage
     blob.upload_from_file(uploaded_image)
-    # blob = bucket.blob('path/to/image.jpg')  # Replace with the desired path and name for the image in Firebase Storage
-    # blob.upload_from_filename('path/to/local/image.jpg')  # Replace with the actual path of the local image file
-    # download_url = blob.generate_signed_url(datetime.timedelta(seconds=300), method='GET')
-
-
     # Set expiration time to datetime.max
     expiration_time = datetime.datetime.max
-
     # Generate signed URL with expiration time set to datetime.max
     download_url = blob.generate_signed_url(expiration_time, method='GET')
-
-
     print(f"Image uploaded successfully. Download URL: {download_url}")
     return download_url
   
@@ -961,8 +951,180 @@ def send_messages(user_id, message):
 ######################################################################################################################
 
 ######################################################################################################################
-# 
+# SEARCH
+def search_profiles_single_term(term):
+    # Searches for profiles based on a single search term.
 
+    # Args:
+    #     term (str): The search term (e.g., "John" or "example@email.com").
+
+    # Returns:
+    #     list: List of profile documents matching the search term.
+    
+    print("term:", term)
+    profiles_ref = db.collection("profiles")
+
+     # Construct the query dynamically for all specified fields
+    # for field in ["first_name", "last_name", "email"]:
+    #     filter = FieldFilter(field, "==", term)
+    #     profiles_ref = profiles_ref.where(filter=filter)
+    id_ref = profiles_ref.where(filter=FieldFilter("id", "==", term))
+    first_name_ref = profiles_ref.where(filter=FieldFilter("first_name", "==", term))
+    last_name_ref = profiles_ref.where(filter=FieldFilter("last_name", "==", term))
+    email_ref = profiles_ref.where(filter=FieldFilter("email", "==", term))
+    
+    
+    
+    # profiles_ref = profiles_ref.where("first_name", "==", "e")
+
+    # Execute the query
+    # results = profiles_ref.stream()
+    # profiles = []
+    # for profile in results:
+    #     profiles.append(profile.to_dict())
+    id_results = id_ref.stream()
+    first_name_results = first_name_ref.stream()
+    last_name_results = last_name_ref.stream()
+    email_results = email_ref.stream()
+    
+    # profiles = []
+    # for profile in id_results:
+    #     profiles.append(profile.to_dict())
+    # for profile in first_name_results:
+    #     profiles.append(profile.to_dict())
+    # for profile in last_name_results:
+    #     profiles.append(profile.to_dict())
+    # for profile in email_results:
+    #     profiles.append(profile.to_dict())
+    
+    profiles = []
+
+    # Add profiles from id_results
+    for profile in id_results:
+        profile_dict = profile.to_dict()
+        if profile_dict not in profiles:
+            profiles.append(profile_dict)
+
+    # Add profiles from first_name_results
+    for profile in first_name_results:
+        profile_dict = profile.to_dict()
+        if profile_dict not in profiles:
+            profiles.append(profile_dict)
+
+    # Add profiles from last_name_results
+    for profile in last_name_results:
+        profile_dict = profile.to_dict()
+        if profile_dict not in profiles:
+            profiles.append(profile_dict)
+
+    # Add profiles from email_results
+    for profile in email_results:
+        profile_dict = profile.to_dict()
+        if profile_dict not in profiles:
+            profiles.append(profile_dict)
+
+        
+    # Collect the matching profiles
+    # profiles = remove_duplicates(profiles)
+
+    # print('profiles', profiles)
+    return profiles
+
+
+
+def search_profiles(query):
+   
+    # Searches for profiles based on the provided query.
+
+    # Args:
+    #     query (dict): A dictionary containing search parameters (e.g., {"first_name": "John"}).
+
+    # Returns:
+    #     list: List of profile documents matching the query.
+ 
+    profiles_ref = db.collection("profiles")
+
+    # Construct the query dynamically based on the provided parameters
+    for field, value in query.items():
+        profiles_ref = profiles_ref.where(field, "==", value)
+
+    # Execute the query
+    results = profiles_ref.stream()
+
+    # Collect the matching profiles
+    profiles = []
+    for profile in results:
+        profiles.append(profile.to_dict())
+
+    return profiles
+
+######################################################################################################################
+
+######################################################################################################################
+# FRIEND REQUESTS
+def send_friend_request(sender_id, recipient_id ):
+    # Specify the document reference
+    print('inside send_friend_request', recipient_id)
+    friend_requests_ref = db.collection('profiles').document(recipient_id)
+
+# Update the array field
+    friend_requests_ref.update({
+        'friend_requests': firestore.ArrayUnion([{
+            'sender_id': sender_id,
+            'recipient_id': recipient_id,
+            'status': 'pending'
+        }])
+    })
+
+def accept_friend_request(sender_email, recipient_email):
+    # Reference to the sender's profile document
+    sender_ref = db.collection('profiles').document(sender_email)
+
+    # Reference to the recipient's profile document
+    recipient_ref = db.collection('profiles').document(recipient_email)
+
+    # Retrieve the sender's profile document
+    sender_profile = sender_ref.get()
+    if not sender_profile.exists:
+        return "Sender profile not found"
+
+    # Retrieve the recipient's profile document
+    recipient_profile = recipient_ref.get()
+    if not recipient_profile.exists:
+        return "Recipient profile not found"
+
+    # Get the friend requests array from sender's profile
+    friend_requests_sender = sender_profile.to_dict().get('friend_requests', [])
+    # Remove the friend request from sender's profile
+    friend_requests_sender = [req for req in friend_requests_sender if req['sender_email'] != sender_email or req['recipient_email'] != recipient_email]
+
+    # Update sender's profile with modified friend requests array
+    sender_ref.update({'friend_requests': friend_requests_sender})
+
+    # Get the friend requests array from recipient's profile
+    friend_requests_recipient = recipient_profile.to_dict().get('friend_requests', [])
+    # Remove the friend request from recipient's profile
+    friend_requests_recipient = [req for req in friend_requests_recipient if req['sender_email'] != sender_email or req['recipient_email'] != recipient_email]
+
+    # Update recipient's profile with modified friend requests array
+    recipient_ref.update({'friend_requests': friend_requests_recipient})
+
+    # Add each user to the other's friend list
+    sender_friends = sender_profile.to_dict().get('friends', [])
+    recipient_friends = recipient_profile.to_dict().get('friends', [])
+
+    # Add recipient to sender's friend list if not already present
+    if recipient_email not in sender_friends:
+        sender_friends.append(recipient_email)
+        sender_ref.update({'friends': sender_friends})
+
+    # Add sender to recipient's friend list if not already present
+    if sender_email not in recipient_friends:
+        recipient_friends.append(sender_email)
+        recipient_ref.update({'friends': recipient_friends})
+
+    return "Friend request accepted successfully"
+    
 ######################################################################################################################
 
 ######################################################################################################################
@@ -978,9 +1140,5 @@ def send_messages(user_id, message):
 ######################################################################################################################
 # 
 
-######################################################################################################################
-
-######################################################################################################################
-# 
 
 ######################################################################################################################
