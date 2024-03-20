@@ -242,14 +242,8 @@ def image_upload(uploaded_image):
     bucket = storage.bucket()
     blob = bucket.blob(folder+ '/' + uploaded_image.name)  # Replace with the desired path and name for the uploaded image in Firebase Storage
     blob.upload_from_file(uploaded_image)
-    # blob = bucket.blob('path/to/image.jpg')  # Replace with the desired path and name for the image in Firebase Storage
-    # blob.upload_from_filename('path/to/local/image.jpg')  # Replace with the actual path of the local image file
-    # download_url = blob.generate_signed_url(datetime.timedelta(seconds=300), method='GET')
-
-
     # Set expiration time to datetime.max
     expiration_time = datetime.datetime.max
-
     # Generate signed URL with expiration time set to datetime.max
     download_url = blob.generate_signed_url(expiration_time, method='GET')
 

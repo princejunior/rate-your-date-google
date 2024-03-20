@@ -389,6 +389,7 @@ def send_friend_request_view(request):
         send_friend_request(sender_id, receiver_id)
         # Add appropriate response or redirect here
 
+
 def search_results(request):
     query = request.GET.get('query')
     if query:
