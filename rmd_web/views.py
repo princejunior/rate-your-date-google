@@ -2,11 +2,13 @@ from django.shortcuts import render
 from django.core.exceptions import MultipleObjectsReturned
 from django.http import JsonResponse, HttpResponse, HttpResponseServerError
 from django.shortcuts import render, redirect
+from django.contrib import messages
 
 ######################################################################################################################
 # STATIC.FUNCTIONS
-from .static.functions.fire import get_user_profile, create_user_profile, edit_user_profile, get_user_post, get_friends_posts, add_post, add_comment, like_post,dislike_post, image_upload, get_messages, send_messages
-from .static.functions.friend_request import send_friend_request
+from .static.functions.fire import get_user_profile, create_user_profile, edit_user_profile
+from .static.functions.fire import get_user_post, get_friends_posts, add_post, add_comment, like_post,dislike_post 
+from .static.functions.fire import image_upload, get_messages, send_messages, search_profiles, search_profiles_single_term, send_friend_request
 from .static.functions.search import search_users
 # from .static.functions.ads import
 # from .static.functions.friend_request import
@@ -45,7 +47,6 @@ def home(request):
         user_information = get_user_profile(user_id)
         friends = user_information.get('friends', [])  # Retrieve the 'friends' list or an empty list if not present
     
-    
         all_friends_posts = get_friends_posts(friends)
     
     
@@ -82,17 +83,25 @@ def home(request):
             
                 # add_comment()
                 return redirect('profile')
+            
+            if action == 'search':
+                print("search button was clicked")
+                search_value = request.POST.get('search')
+                print("search value", search_value)
+                search_profiles_single_term(search_value)
+                # search_profiles(search_value)
+                return redirect('search_results')
     
         context = {
-        'user_information': user_information,
-        'friend_posts': all_friends_posts,
+            'user_information': user_information,
+            'friend_posts': all_friends_posts,
         }
 
         return render(request, 'home.html', context)
     else:
         user_id = None
         context = {
-        'user_information': get_user_profile(user_id),
+            'user_information': user_id,
             'friend_posts': None,
         }
         return render(request, 'home.html', context)
@@ -171,14 +180,16 @@ def create_user(request):
             'email': email,
             'first_name': request.POST.get('first_name'),
             'last_name': request.POST.get('last_name'),
-            'profile_picture': request.POST.get('profile_picture'),
+            'profile_picture': request.FILES.get('profile_picture'),
+            # 'profile_picture': profile_image_url,
+            
             'professional_background': request.POST.getlist('professional_background'),
             'social_media': social_media,
             'interests': request.POST.getlist('interests'),
             'privacy_settings': {'email_visibility': request.POST.get('email_visibility')},
         }
         create_user_profile(user_profile_data)
-        return redirect('profile_created')  # Redirect to a page indicating profile creation success
+        return redirect('profile')  # Redirect to a page indicating profile creation success
     return render(request, 'profile/create_user.html')
 
 def edit_user(request):
@@ -208,8 +219,7 @@ def edit_user(request):
         # print("profile_image", profile_image)
         
         if profile_image:
-            profile_image_url = image_upload(profile_image)
-            
+            profile_image_url = image_upload(profile_image,'profile')            
         else:
             profile_image_url = None  # Or provide a default URL if needed
 

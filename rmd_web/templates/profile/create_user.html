@@ -7,14 +7,12 @@ Create User Profile
 
 {% block content %}
 <h1>Create User Profile</h1>
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     Email: <input type="text" name="email"><br>
     First Name: <input type="text" name="first_name"><br>
     Last Name: <input type="text" name="last_name"><br>
-    Profile Picture:  <input type="file" name="image">
-    {% comment %} <input type="submit" value="Upload Image"> {% endcomment %}
-    {% comment %} <input type="text" name="profile_picture"><br> {% endcomment %}
+    Profile Picture:  <input type="file" name="profile_picture"><br>
     Professional Background: <input type="text" name="professional_background"><br>
     Social Media: 
     <br>

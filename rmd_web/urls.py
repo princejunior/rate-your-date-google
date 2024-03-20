@@ -15,7 +15,8 @@ urlpatterns = [
 
 ######################################################################################################################
 # 
-path('send_friend_request/', views.send_friend_request_view, name='send_friend_request'),
+path('send_friend_request_view/', views.send_friend_request_view, name='send_friend_request_view'),
+path('send-friend-request/', views.send_friend_request, name='send_friend_request'),
 ######################################################################################################################
 
 ######################################################################################################################
