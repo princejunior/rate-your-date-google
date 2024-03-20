@@ -2,11 +2,13 @@ from django.shortcuts import render
 from django.core.exceptions import MultipleObjectsReturned
 from django.http import JsonResponse, HttpResponse, HttpResponseServerError
 from django.shortcuts import render, redirect
+from django.contrib import messages
 
 ######################################################################################################################
 # STATIC.FUNCTIONS
-from .static.functions.fire import get_user_profile, create_user_profile, edit_user_profile, get_user_post, get_friends_posts, add_post, add_comment, like_post,dislike_post, image_upload, get_messages, send_messages
-from .static.functions.friend_request import send_friend_request
+from .static.functions.fire import get_user_profile, create_user_profile, edit_user_profile
+from .static.functions.fire import get_user_post, get_friends_posts, add_post, add_comment, like_post,dislike_post 
+from .static.functions.fire import image_upload, get_messages, send_messages, search_profiles, search_profiles_single_term, send_friend_request
 from .static.functions.search import search_users
 # from .static.functions.ads import
 # from .static.functions.friend_request import
@@ -45,7 +47,6 @@ def home(request):
         user_information = get_user_profile(user_id)
         friends = user_information.get('friends', [])  # Retrieve the 'friends' list or an empty list if not present
     
-    
         all_friends_posts = get_friends_posts(friends)
     
     
@@ -82,17 +83,25 @@ def home(request):
             
                 # add_comment()
                 return redirect('profile')
+            
+            if action == 'search':
+                print("search button was clicked")
+                search_value = request.POST.get('search')
+                print("search value", search_value)
+                search_profiles_single_term(search_value)
+                # search_profiles(search_value)
+                return redirect('search_results')
     
         context = {
-        'user_information': user_information,
-        'friend_posts': all_friends_posts,
+            'user_information': user_information,
+            'friend_posts': all_friends_posts,
         }
 
         return render(request, 'home.html', context)
     else:
         user_id = None
         context = {
-        'user_information': get_user_profile(user_id),
+            'user_information': user_id,
             'friend_posts': None,
         }
         return render(request, 'home.html', context)
@@ -157,23 +166,31 @@ def get_individuals_profile(request):
     
 def create_user(request):
     email = request.user.email
-    social_media = [
-       request.POST.get('instagram'),
-       request.POST.get('facebook'),
-    ]
+    
+    
     if request.method == 'POST':
+        social_media = [
+            request.POST.get('instagram'),
+            request.POST.get('facebook'),
+            ]
+
         user_profile_data = {
             'email': email,
             'first_name': request.POST.get('first_name'),
             'last_name': request.POST.get('last_name'),
-            'profile_picture': request.POST.get('profile_picture'),
+            'profile_picture': request.FILES.get('profile_picture'),
+            # 'profile_picture': profile_image_url,
+            
             'professional_background': request.POST.getlist('professional_background'),
             'social_media': social_media,
             'interests': request.POST.getlist('interests'),
-            'privacy_settings': {'email_visibility': request.POST.get('email_visibility')}
+            'privacy_settings': {'email_visibility': request.POST.get('email_visibility')},
+            'connections': [],
+            'conversations': {'message_ids': []}, 
+            'friends': []
         }
         create_user_profile(user_profile_data)
-        return redirect('profile_created')  # Redirect to a page indicating profile creation success
+        return redirect('profile')  # Redirect to a page indicating profile creation success
     return render(request, 'profile/create_user.html')
 
 def edit_user(request):
@@ -196,8 +213,7 @@ def edit_user(request):
         # print("profile_image", profile_image)
         
         if profile_image:
-            profile_image_url = image_upload(profile_image)
-            
+            profile_image_url = image_upload(profile_image,'profile')            
         else:
             profile_image_url = None  # Or provide a default URL if needed
 
@@ -219,6 +235,16 @@ def edit_user(request):
 
 ######################################################################################################################
 # FUNCTIONALITY PAGES
+# def send_friend_request(request):
+#     if request.method == 'POST':
+#         sender_id = request.user.email
+#         recipient_id = request.POST.get('recipient_id')
+#         # Assume you have a Firestore collection named 'friend_requests'
+#         send_friend_request(sender_id,recipient_id)
+#         messages.success(request, 'Friend request sent successfully.')
+#         return redirect('profile')  # Redirect to profile page after sending request
+#     else:
+#         return redirect('home')  # Redirect to home page if request method is not POST
 
 def send_friend_request_view(request):
     if request.method == 'POST':
@@ -228,12 +254,43 @@ def send_friend_request_view(request):
         # Add appropriate response or redirect here
 
 def search_results(request):
-    query = request.GET.get('query')
-    if query:
-        results = search_users(query)
-    else:
-        results = []
-    return render(request, 'pages/search.html', {'results': results, 'query': query})
+    # Get the query parameter 'query' from the URL
+    query_param = request.GET.get('query', '')
+    # Get the query parameter 'search' from the URL
+    search_param = request.GET.get('search', '')
+    print("Search_results",query_param, search_param)
+    # Now you can use the query_param and search_param to fetch information
+    # You can process the query and search parameters as needed
+    search_result = search_profiles_single_term(query_param)
+    print(search_result)
+    # For example, you can render a template with the query and search parameters
+    
+    
+    if request.method == 'POST':
+        sender_id = request.user.email
+        recipient_id = request.POST.get('recipient_id')
+        print('sender_id', sender_id)
+        print('recipient_id', recipient_id)
+        # Assume you have a Firestore collection named 'friend_requests'
+        send_friend_request(sender_id, recipient_id)
+        # messages.success(request, 'Friend request sent successfully.')
+        
+
+    context = {
+        'query': query_param, 
+        'search': search_param,
+        'search_results' :  search_result
+    }
+    return render(request, 'pages/search_results.html', context)
+    
+# def search_results(request):
+#     print('Inside search_results')
+#     query = request.GET.get('query')
+#     if query:
+#         results = search_users(query)
+#     else:
+#         results = []
+#     return render(request, 'pages/search_results.html', {'results': results, 'query': query})
 ######################################################################################################################
 # POSTS
 

@@ -78,6 +78,7 @@
         </a>
         <form method="GET" action="{% url 'search_results' %}" class="w3-bar-item">
           <input type="text" name="query" placeholder="Search by name">
+          <input type="hidden" name="search" value="search">
           <button type="submit">Search</button>
       </form>
         <a href="{% url 'profile' %}" class="w3-bar-item w3-button w3-hide-small w3-right w3-padding-large w3-hover-white" title="My Account">
