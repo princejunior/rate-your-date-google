@@ -390,6 +390,16 @@ def search_results(request):
     return render(request, 'pages/search.html', {'results': results, 'query': query})
 # # views.py
 # FUNCTIONALITY PAGES
+# def send_friend_request(request):
+#     if request.method == 'POST':
+#         sender_id = request.user.email
+#         recipient_id = request.POST.get('recipient_id')
+#         # Assume you have a Firestore collection named 'friend_requests'
+#         send_friend_request(sender_id,recipient_id)
+#         messages.success(request, 'Friend request sent successfully.')
+#         return redirect('profile')  # Redirect to profile page after sending request
+#     else:
+#         return redirect('home')  # Redirect to home page if request method is not POST
 
 def send_friend_request_view(request):
     if request.method == 'POST':
