@@ -1,11 +1,11 @@
 from django.shortcuts import render
 from django.core.exceptions import MultipleObjectsReturned
-from django.http import JsonResponse, HttpResponseServerError
+from django.http import JsonResponse, HttpResponse, HttpResponseServerError
 from django.shortcuts import render, redirect
 
 ######################################################################################################################
 # STATIC.FUNCTIONS
-from .static.functions.fire import get_user_profile, create_user_profile, edit_user_profile, image_upload
+from .static.functions.fire import get_user_profile, create_user_profile, edit_user_profile, get_user_post, add_post, add_comment, like_post,dislike_post, image_upload, get_messages, send_messages
 from .static.functions.friend_request import send_friend_request
 from .static.functions.search import search_users
 # from .static.functions.ads import
@@ -40,23 +40,65 @@ def upload_image(request):
 # HOME
 def home(request):
     print(request.user)
+    if request.user.is_authenticated:
+        user_id = request.user.email
+    else:
+        user_id = None
     context = {
-       'user_information': get_user_profile(request.user.email)
+       'user_information': get_user_profile(user_id)
     }
-    return render(request, 'home.html', {'context': context})
+    return render(request, 'home.html', context)
 ######################################################################################################################
 
 ######################################################################################################################
 # PROFILE_&_USER
 
 def profile(request):
-    print("User's profile" ,request.user)
+    user_id = request.user.email
+    profile_posts = get_user_post(request.user.email)
+    # print("User's profile",request.user)
+    user_information = get_user_profile(user_id)
+    if request.method == 'POST':
+        print("Post button was clicked")
+        
+        action = request.POST.get('action')
+        print('action', action)
+        if action == 'add_post':
+            print("add_post button was clicked")
+            target_user_id = user_id
+            post_content = request.POST.get('comment')
+            post_image_url = request.FILES.get('picture')
+            add_post(user_id, target_user_id, post_content,post_image_url)
+            return redirect('profile')
+        
+        if action == 'like':
+            print("like_post button was clicked")
+            post_id = request.POST.get('post_id')
+            
+            like_post(post_id, user_id) 
+            print("post ID", post_id)
+            # pass
+            return redirect('profile')
+
+        if action == 'dislike':
+            print("dislike_post button was clicked")
+            post_id = request.POST.get('post_id')
+            dislike_post(post_id,user_id)
+            return redirect('profile')
+        
+        if action == 'comment':
+            print("comment button was clicked")
+            
+            # add_comment()
+            return redirect('profile')
     
     context = {
-       'user_information': get_user_profile(request.user.email)
+       'user_information': user_information,
+       'profile_posts': profile_posts,
     }
-    print(context)
-    return render(request, 'profile/profile.html', {'context': context})
+    # print(context)
+    return render(request, 'profile/profile.html', context)
+
 
 def get_individuals_profile(request):
     print(request.user)
@@ -173,63 +215,81 @@ def search_results(request):
 ######################################################################################################################
 # POSTS
 
-def create_post(request, username):
-    if request.method == 'POST':
-        post_data = {
-            'email': email,
-            'first_name': request.POST.get('first_name'),
-            'last_name': request.POST.get('last_name'),
-            'profile_picture': request.POST.get('profile_picture'),
-            'professional_background': request.POST.getlist('professional_background'),
-            'social_media': social_media,
-            'interests': request.POST.getlist('interests'),
-            'privacy_settings': {'email_visibility': request.POST.get('email_visibility')}
-        }
-        create_post(post_data)
-        return redirect('profile_created')  # Redirect to a page indicating profile creation success
+# def create_post(request, username):
+#     if request.method == 'POST':
+#         post_data = {
+#             'email': email,
+#             'first_name': request.POST.get('first_name'),
+#             'last_name': request.POST.get('last_name'),
+#             'profile_picture': request.POST.get('profile_picture'),
+#             'professional_background': request.POST.getlist('professional_background'),
+#             'social_media': social_media,
+#             'interests': request.POST.getlist('interests'),
+#             'privacy_settings': {'email_visibility': request.POST.get('email_visibility')}
+#         }
+#         create_post(post_data)
+#         return redirect('profile_created')  # Redirect to a page indicating profile creation success
     
     
-    if request.method == 'POST':
-        form = PostForm(request.POST)
-        if form.is_valid():
-            content = form.cleaned_data['content']
-            user_id = request.user.id  # Assuming you have user authentication set up properly
+#     if request.method == 'POST':
+#         form = PostForm(request.POST)
+#         if form.is_valid():
+#             content = form.cleaned_data['content']
+#             user_id = request.user.id  # Assuming you have user authentication set up properly
 
-            # Store the post in Firestore
-            db = firestore.client()
-            doc_ref = db.collection('posts').document()
-            doc_ref.set({
-                'user_id': user_id,
-                'content': content
-            })
+#             # Store the post in Firestore
+#             db = firestore.client()
+#             doc_ref = db.collection('posts').document()
+#             doc_ref.set({
+#                 'user_id': user_id,
+#                 'content': content
+#             })
 
-            return redirect('profile', username=username)
-    else:
-        form = PostForm()
-    return render(request, 'create_post.html', {'form': form})
+#             return redirect('profile', username=username)
+#     else:
+#         form = PostForm()
+#     return render(request, 'create_post.html', {'form': form})
 
-def add_comment(request, post_id):
-    # Implement adding a comment
-    # Retrieve the post using post_id
-    # Add a comment to the post
-    return JsonResponse({"success": True})
+# def add_comment(request, post_id):
+#     # Implement adding a comment
+#     # Retrieve the post using post_id
+#     # Add a comment to the post
+#     user_id = request.user.email
+#     add_comment()
+#     return JsonResponse({"success": True})
 
-def like_post(request, post_id):
-    # Implement liking a post
-    # Retrieve the post using post_id
-    # Increment the likes count for the post
-    return JsonResponse({"success": True})
+# def like_post(request, post_id):
+#     # Implement liking a post
+#     # Retrieve the post using post_id
+#     # Increment the likes count for the post
+#     return JsonResponse({"success": True})
 
-def dislike_post(request, post_id):
-    # Implement disliking a post
-    # Retrieve the post using post_id
-    # Increment the dislikes count for the post
-    return JsonResponse({"success": True})
+# def dislike_post(request, post_id):
+#     # Implement disliking a post
+#     # Retrieve the post using post_id
+#     # Increment the dislikes count for the post
+#     return JsonResponse({"success": True})
 
 ######################################################################################################################
 
 ######################################################################################################################
-# 
+# MESSAGES
+
+def messages(request):
+    messages = get_messages()
+    return render(request, 'pages/messages.html', {'messages': messages})
+
+# def get_messages(request):
+#     messages = get_messages()
+#     return render(request, 'pages/messages.html', {'messages': messages})
+
+def send_message(request):
+    if request.method == 'POST':
+        user_id = request.user.email  # You should handle user authentication and get the user ID here
+        message = request.POST['message']
+        send_messages(user_id,message)
+        return redirect('messages')
+    return HttpResponse("Method Not Allowed", status=405)
 
 ######################################################################################################################
 # 

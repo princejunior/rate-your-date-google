@@ -51,7 +51,7 @@
           title="Account Settings"
           ><i class="fa fa-user"></i
         ></a>
-        <a href="{% url 'message' %}"
+        <a href="{% url 'messages' %}"
           class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white"
           title="Messages"
           ><i class="fa fa-envelope"></i
@@ -85,7 +85,7 @@
           <button type="submit">Search</button>
       </form>
         <a href="{% url 'profile' %}" class="w3-bar-item w3-button w3-hide-small w3-right w3-padding-large w3-hover-white" title="My Account">
-          <img src="/w3images/avatar2.png" class="w3-circle" style="height: 23px; width: 23px" alt="Avatar"/>
+          <img src="{{user_information.profile_picture}}" class="w3-circle" style="height: 23px; width: 23px" alt="Avatar"/>
         </a>
       </div>
     </div>
@@ -139,5 +139,6 @@
         }
       }
     </script>
+    <script src="https://kit.fontawesome.com/a2dc75d948.js" crossorigin="anonymous"></script>
   </body>
 </html>
