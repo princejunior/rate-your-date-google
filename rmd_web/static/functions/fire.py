@@ -7,13 +7,13 @@ db = firestore.client()
 ######################################################################################################################
 # PROFILE
 
-def get_user_profile(email):
-    doc_ref = db.collection('profiles').document(email)
+def get_user_profile(user_id):
+    doc_ref = db.collection('profiles').document(user_id)
     doc = doc_ref.get()
     if doc.exists:
         return doc.to_dict()
     else:
-        print(f"No user profile found for email: {email}")
+        print(f"No user profile found for email: {user_id}")
         return None
 
 # # Example usage:
@@ -24,7 +24,7 @@ def get_user_profile(email):
 #     print(user_profile)
 
 def create_user_profile(user_profile_data):
-    image_url = image_upload(user_profile_data['profile_picture'])
+    image_url = image_upload(user_profile_data['profile_picture'],"profile")
     # social_media = [
     #     user_profile_data['instagram'],
     #     user_profile_data['facebook'], 
@@ -222,10 +222,12 @@ def get_group_date(group_date_id):
 ######################################################################################################################
 # UPLOAD_IMAGE
 
-def image_upload(uploaded_image):
+def image_upload(uploaded_image,folder):
     print(uploaded_image)
     bucket = storage.bucket()
-    blob = bucket.blob('profile/' + uploaded_image.name)  # Replace with the desired path and name for the uploaded image in Firebase Storage
+    blob = bucket.blob(folder+ '/' + uploaded_image.name)  # Replace with the desired path and name for the uploaded image in Firebase Storage
+    
+    # blob = bucket.blob('profile/' + uploaded_image.name)  # Replace with the desired path and name for the uploaded image in Firebase Storage
     
     # blob = bucket.blob('path/to/' + uploaded_image.name)  # Replace with the desired path and name for the uploaded image in Firebase Storage
     blob.upload_from_file(uploaded_image)
@@ -248,27 +250,68 @@ def image_upload(uploaded_image):
 
 ######################################################################################################################
 # POSTS
+def get_user_post(user_id):
+    # Assuming you're using the Firestore client library
+    doc_ref = db.collection('posts').where('target_user_id', '==', user_id)
+    docs = doc_ref.stream()
+
+    posts = []
+    for doc in docs:
+        if doc.exists:
+            post_data = doc.to_dict()
+            post_data['id'] = doc.id  # Assuming the post ID is stored in 'id' field in Firestore
+            posts.append(post_data)
+
+    if not posts:
+        print(f"No user post found for user_id: {user_id}")
+        return []
+
+    # Sort posts by timestamp in descending order (most recent first)
+    posts.sort(key=lambda x: x['timestamp'], reverse=True)
+    
+    return posts
+
+
+# def get_user_post(user_id):
+#     # Assuming you're using the Firestore client library
+#     doc_ref = db.collection('posts').where('target_user_id', '==', user_id)
+#     docs = doc_ref.stream()
+
+#     for doc in docs:
+#         if doc.exists:
+#             return doc.to_dict()
+
+#     print(f"No user post found for email: {user_id}")
+#     return None
 
 # Function to add a post to Firestore
 def add_post(user_id, target_user_id, post_content, post_image_url=None):
+    print("inside add_post")
     # Create a new document in the "posts" collection
     doc_ref = db.collection("posts").document()
+    if post_image_url is not None:
+        post_url_image = image_upload(post_image_url, "post")
+    else:
+        post_url_image = None
     
+    new_post_ref = db.collection('posts').document()
     # Define the data for the post
-    post_data = {
+    new_post_ref.set({
         "user_id": user_id,
         "target_user_id": target_user_id,
         "post_content": post_content,
-        "post_image_url": post_image_url,
+        "post_image_url": post_url_image,
         "likes": 0,
         "dislikes": 0,
         "comments": [],
         "timestamp": firestore.SERVER_TIMESTAMP
-    }
+    })
     
     # Set the data for the document
-    doc_ref.set(post_data)
+    # doc_ref.set(new_post_ref)
     print("Post added successfully")
+    print("Out of add_post")
+    
 
 # Function to add a comment to a post
 def add_comment(post_id, user_id, target_user_id, comment_content):
@@ -293,7 +336,9 @@ def add_comment(post_id, user_id, target_user_id, comment_content):
     print("Comment added successfully")
 
 # Function to like a post
-def like_post(post_id, user_id, target_user_id):
+def like_post(post_id, current_user_id):
+    print("inside like_post()")
+    
     # Reference the post document
     post_ref = db.collection("posts").document(post_id)
     
@@ -301,12 +346,14 @@ def like_post(post_id, user_id, target_user_id):
     post_ref.update({"likes": firestore.Increment(1)})
     
     # Add the user to the list of users who liked the post
-    post_ref.collection("likes").add({"user_id": user_id, "target_user_id": target_user_id})
+    # post_ref.collection("likes").add({"user_id": current_user_id})
     
     print("Post liked")
+    print("finished like_post()")
+    
 
 # Function to dislike a post
-def dislike_post(post_id, user_id, target_user_id):
+def dislike_post(post_id, current_user_id):
     # Reference the post document
     post_ref = db.collection("posts").document(post_id)
     
@@ -314,7 +361,7 @@ def dislike_post(post_id, user_id, target_user_id):
     post_ref.update({"dislikes": firestore.Increment(1)})
     
     # Add the user to the list of users who disliked the post
-    post_ref.collection("dislikes").add({"user_id": user_id, "target_user_id": target_user_id})
+    # post_ref.collection("dislikes").add({"user_id": current_user_id, "target_user_id": target_user_id})
     
     print("Post disliked")
 
@@ -323,8 +370,19 @@ def dislike_post(post_id, user_id, target_user_id):
 ######################################################################################################################
 
 ######################################################################################################################
-# 
+# MESSAGES
+def get_messages():
+    messages_ref = db.collection('messages').order_by('timestamp', direction=firestore.Query.DESCENDING).limit(10)
+    messages = messages_ref.stream()
+    return messages
 
+
+def send_messages(user_id, message):
+    db.collection('messages').add({
+            'message': message,
+            'user_id': user_id,
+            'timestamp': firestore.SERVER_TIMESTAMP
+        })
 ######################################################################################################################
 
 ######################################################################################################################
