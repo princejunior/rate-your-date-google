@@ -798,7 +798,55 @@ def get_user_post(user_id):
     
     return posts
 
+def get_friends_posts(friends_ids):
+    all_posts = []
+    
+    for friend_id in friends_ids:
+        # Assuming you're using the Firestore client library
+        doc_ref = db.collection('posts').where('target_user_id', '==', friend_id)
+        docs = doc_ref.stream()
 
+        posts = []
+        for doc in docs:
+            if doc.exists:
+                post_data = doc.to_dict()
+                post_data['id'] = doc.id  # Assuming the post ID is stored in 'id' field in Firestore
+                posts.append(post_data)
+
+        if posts:
+            all_posts.extend(posts)
+
+    if not all_posts:
+        print("No posts found for any of the friends.")
+        return []
+
+    # Sort all posts by timestamp in descending order (most recent first)
+    all_posts.sort(key=lambda x: x['timestamp'], reverse=True)
+    
+    return all_posts
+
+# def get_friends_posts(friends_id):
+    
+#      # Assuming you're using the Firestore client library
+#     doc_ref = db.collection('posts').where('target_user_id', '==', friend_id)
+#     docs = doc_ref.stream()
+
+#     posts = []
+#     for doc in docs:
+#         if doc.exists:
+#             post_data = doc.to_dict()
+#             post_data['id'] = doc.id  # Assuming the post ID is stored in 'id' field in Firestore
+#             posts.append(post_data)
+
+#     if not posts:
+#         print(f"No user post found for user_id: {friend_id}")
+#         return []
+
+#     # Sort posts by timestamp in descending order (most recent first)
+#     posts.sort(key=lambda x: x['timestamp'], reverse=True)
+    
+#     return posts
+    
 # def get_user_post(user_id):
 #     # Assuming you're using the Firestore client library
 #     doc_ref = db.collection('posts').where('target_user_id', '==', user_id)
