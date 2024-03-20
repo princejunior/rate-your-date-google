@@ -128,33 +128,33 @@ def user_profile(request):
     if request.method == 'POST':
         print("Post button was clicked")
         
-        action = request.POST.get('action')
-        print('action', action)
-        if action == 'add_post':
-            print("add_post button was clicked")
-            target_user_id = user_id
-            post_content = request.POST.get('comment')
-            post_image_url = request.FILES.get('picture')
-            add_post(user_id, target_user_id, post_content,post_image_url)
-            return redirect('profile')
+            action = request.POST.get('action')
+            print('action', action)
+            if action == 'add_post':
+                print("add_post button was clicked")
+                target_user_id = user_id
+                post_content = request.POST.get('comment')
+                post_image_url = request.FILES.get('picture')
+                add_post(user_id, target_user_id, post_content,post_image_url)
+                return redirect('profile')
         
-        if action == 'like':
-            print("like_post button was clicked")
-            post_id = request.POST.get('post_id')
+            if action == 'like':
+                print("like_post button was clicked")
+                post_id = request.POST.get('post_id')
             
-            like_post(post_id, user_id) 
-            print("post ID", post_id)
-            # pass
-            return redirect('profile')
+                like_post(post_id, user_id) 
+                print("post ID", post_id)
+                # pass
+                return redirect('profile')
 
-        if action == 'dislike':
-            print("dislike_post button was clicked")
-            post_id = request.POST.get('post_id')
-            dislike_post(post_id,user_id)
-            return redirect('profile')
+            if action == 'dislike':
+                print("dislike_post button was clicked")
+                post_id = request.POST.get('post_id')
+                dislike_post(post_id,user_id)
+                return redirect('profile')
         
-        if action == 'comment':
-            print("comment button was clicked")
+            if action == 'comment':
+                print("comment button was clicked")
             
             # add_comment()
             return redirect('profile')
