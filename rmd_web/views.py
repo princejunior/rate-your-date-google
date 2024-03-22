@@ -42,15 +42,15 @@ def upload_image(request):
 ######################################################################################################################
 # HOME
 def home(request):
-    print(request.user)
+    # print(request.user)
     if request.user.is_authenticated:
         user_id = request.user.email
         user_information = get_user_profile(user_id)
         
         friend_requests = user_information.get('friend_requests', [])
-        print(friend_requests)
+        # print(friend_requests)
         friends = user_information.get('friends', [])  # Retrieve the 'friends' list or an empty list if not present
-        print(friends)
+        # print(friends)
         # friend_requests = get_user_friend_request(user_information)
         all_friends_posts = get_friends_posts(friends)
     
@@ -99,6 +99,8 @@ def home(request):
             
             if action == "accept_friend_request":
                 # Example of handling friend request decline
+                array_placement_id = request.POST.get('array_id')
+                print('array_placement_id', array_placement_id)
                 sender_email = request.POST.get('sender_id')
                 recipient_email = request.user.email  # Assuming recipient is the current user
 
@@ -198,7 +200,7 @@ def profile(request):
     return render(request, 'profile/profile.html', context)
 
 def get_individuals_profile(request):
-    print(request.user)
+    # print(request.user)
     return render(request, 'profile/profile.html')
     
 def create_user(request):

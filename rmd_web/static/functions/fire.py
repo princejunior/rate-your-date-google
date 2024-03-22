@@ -14,7 +14,7 @@ def get_user_profile(email):
     doc_ref = db.collection('profiles').document(email)
     doc = doc_ref.get()
     if doc.exists:
-        print(doc.to_dict())
+        # print(doc.to_dict())
         return doc.to_dict()
     else:
         print(f"No user profile found for email: {user_id}")
@@ -466,7 +466,7 @@ def search_profiles_single_term(term):
     # Returns:
     #     list: List of profile documents matching the search term.
     
-    print("term:", term)
+    # print("term:", term)
     profiles_ref = db.collection("profiles")
 
      # Construct the query dynamically for all specified fields
