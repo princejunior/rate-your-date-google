@@ -1,3 +1,5 @@
 fire/rate-my-date-fca52-cf894cb26c1d.json
 __pycache__/
 rmd_web/__pycache__
+venv
+.env
