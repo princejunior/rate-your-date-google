@@ -8,7 +8,8 @@ from django.contrib import messages
 # STATIC.FUNCTIONS
 from .static.functions.fire import get_user_profile, create_user_profile, edit_user_profile
 from .static.functions.fire import get_user_post, get_friends_posts, add_post, add_comment, like_post,dislike_post 
-from .static.functions.fire import image_upload, get_messages, send_messages, search_profiles, search_profiles_single_term, send_friend_request
+from .static.functions.fire import image_upload, get_messages, send_messages, search_profiles, search_profiles_single_term
+from .static.functions.fire import get_user_friend_request, send_friend_request, accept_friend_request, decline_friend_request
 from .static.functions.search import search_users
 # from .static.functions.ads import
 # from .static.functions.friend_request import
@@ -45,8 +46,12 @@ def home(request):
     if request.user.is_authenticated:
         user_id = request.user.email
         user_information = get_user_profile(user_id)
+        
+        friend_requests = user_information.get('friend_requests', [])
+        print(friend_requests)
         friends = user_information.get('friends', [])  # Retrieve the 'friends' list or an empty list if not present
-    
+        print(friends)
+        # friend_requests = get_user_friend_request(user_information)
         all_friends_posts = get_friends_posts(friends)
     
     
@@ -91,10 +96,42 @@ def home(request):
                 search_profiles_single_term(search_value)
                 # search_profiles(search_value)
                 return redirect('search_results')
+            
+            if action == "accept_friend_request":
+                # Example of handling friend request decline
+                sender_email = request.POST.get('sender_id')
+                recipient_email = request.user.email  # Assuming recipient is the current user
+
+                # Call the decline_friend_request function
+                result = accept_friend_request(sender_email, recipient_email)
+
+                if result == "Friend request accepted successfully":
+                    # If the friend request was declined successfully, return success response
+                    return HttpResponse("Friend request accepted successfully", status=200)
+                else:
+                # If there was an error (e.g., sender or recipient profile not found), return error response
+                    return HttpResponse(result, status=400)
+                
+            if action == "decline_friend_request":
+                # Example of handling friend request decline
+                sender_email = request.POST.get('sender_id')
+                recipient_email = request.user.email  # Assuming recipient is the current user
+
+                # Call the decline_friend_request function
+                result = decline_friend_request(sender_email, recipient_email)
+
+                if result == "Friend request declined successfully":
+                    # If the friend request was declined successfully, return success response
+                    return HttpResponse("Friend request declined successfully", status=200)
+                else:
+                # If there was an error (e.g., sender or recipient profile not found), return error response
+                    return HttpResponse(result, status=400)
     
         context = {
             'user_information': user_information,
-            'friend_posts': all_friends_posts,
+            'friends':friends,
+            'friend_posts': all_friends_posts, 
+            'friend_requests': friend_requests
         }
 
         return render(request, 'home.html', context)
@@ -103,6 +140,7 @@ def home(request):
         context = {
             'user_information': user_id,
             'friend_posts': None,
+            'friend_requests': None
         }
         return render(request, 'home.html', context)
         
@@ -158,7 +196,6 @@ def profile(request):
     }
     # print(context)
     return render(request, 'profile/profile.html', context)
-
 
 def get_individuals_profile(request):
     print(request.user)
@@ -248,6 +285,7 @@ def send_friend_request_view(request):
         receiver_id = request.POST.get('receiver_id')  # Assuming receiver_id is sent via POST
         send_friend_request(sender_id, receiver_id)
         # Add appropriate response or redirect here
+
 
 def search_results(request):
     query = request.GET.get('query')
