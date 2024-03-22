@@ -961,7 +961,7 @@ def search_profiles_single_term(term):
     # Returns:
     #     list: List of profile documents matching the search term.
     
-    print("term:", term)
+    # print("term:", term)
     profiles_ref = db.collection("profiles")
 
      # Construct the query dynamically for all specified fields
