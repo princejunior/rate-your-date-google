@@ -1,10 +1,14 @@
-{% extends "navbar.html" %}
+<!-- <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> -->
+
+
+  {% extends "navbar.html" %}
 {% load static %}
 {% block title %}
 Profile
 {% endblock %}
 
 
+<div class="w3-container w3-content" style="max-width: 1400px; margin-top: 80px">
 {% block content %}
 <style>
   .like-icon-btn {
@@ -51,7 +55,76 @@ Profile
     <h1> Logged in as: {{ request.user.id}} </h>
         
 
-<a href="{% url 'edit_profile' %}">Edit</a>
+
+<style>
+.profile-box {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); /* Add some shadow for depth */
+    margin-top: 20px; /* Additional spacing from top */
+    margin-bottom: 20px;
+    max-width: 800px;
+    margin: auto;
+  }
+
+.profile-header {
+    background-color: #f1f1f1; /* Light grey background */
+    padding: 20px; /* Spacing around the header text */
+    color: #333; /* Dark grey color for the text */
+  }
+
+ .profile-info {
+    padding: 50px; /* Spacing inside the profile information area */
+    line-height: 1.6; /* Increase line-height for better readability */
+  }
+
+  .action-buttons a {
+    margin-right: 50px; /* Spacing between buttons */
+  }
+
+  .action-buttons {
+    text-align: center; /* Center-align the buttons */
+    padding-bottom: 20px; /* Spacing at the bottom */
+  }
+
+  /* .w3-container {
+    max-width: 8000px; /* Adjusted max-width for a narrower profile box */
+    /* margin: auto; Centers the container */
+  /*  */
+
+</style>
+
+  <div class="w3-card w3-round w3-white w3-padding-large">
+    
+    <div class="w3-card w3-round profile-box">
+    <div class="profile-header w3-center">
+      <h2>Profile Information</h2>
+    </div>
+
+
+    
+
+    <!-- Profile Section -->
+    <div class="profile-info">
+    <p class="w3-large"><b>Username:</b> {{ request.user.username }}</p>
+    <p class="w3-large"><b>Email:</b> {{ request.user.email }}</p>
+    <p class="w3-large"><b>User ID:</b> {{ request.user.id }}</p>
+    </div>
+
+<!-- Action Buttons -->
+    <divc class="action-buttons">
+      <div class="w3-section">
+
+      <a href="{% url 'edit_profile' %}" class="w3-button w3-teal w3-round">Edit Profile</a>
+
+      <a href="{% url 'account_logout' %}" class="w3-button w3-red w3-round">Logout</a>
+      <a href="../google/login/?process=login" class="w3-button w3-blue w3-round">Signup</a>
+    </div>
+
+    </div>
+     
+    </div>
+  </div>
+  </div>
+</div>
 
 <a href="{% url 'account_logout' %}">Logout</a>
 <a href="../google/login/?process=login">Signup</a>
@@ -178,7 +251,9 @@ Profile
 </div>
   
 
+
 {% endblock content %}
+
 
 
 
@@ -236,3 +311,4 @@ Profile
 {% else %}
     <p>No posts found</p>
 {% endif %} {% endcomment %}
+
