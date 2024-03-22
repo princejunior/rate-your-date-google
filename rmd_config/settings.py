@@ -145,8 +145,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Initialize Firebase Admin SDK
 cred = credentials.Certificate("fire/rate-my-date-fca52-cf894cb26c1d.json")
-firebase_admin.initialize_app(cred)
-
+firebase_admin.initialize_app(cred, {
+    'storageBucket': 'rate-my-date-fca52.appspot.com' # Replace with your Firebase Storage bucket name)
+})
 # ALLAUTH
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',

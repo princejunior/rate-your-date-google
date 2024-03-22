@@ -25,12 +25,14 @@ Profile
               <div class="w3-container">
                 <h4 class="w3-center">My Profile</h4>
                 <p class="w3-center">
-                  <img
-                    src="/w3images/avatar3.png"
-                    class="w3-circle"
-                    style="height: 106px; width: 106px"
-                    alt="Avatar"
-                  />
+                  <a href="{% url 'profile' %}">
+                    <img
+                      src="{{user_information.profile_picture}}"
+                      class="w3-circle"
+                      style="height: 106px; width: 106px"
+                      alt="Avatar"
+                    />
+                  </a>
                 </p>
                 <hr />
                 <p>
@@ -153,9 +155,7 @@ Profile
             <br />
     
             <!-- Alert Box -->
-            <div
-              class="w3-container w3-display-container w3-round w3-theme-l4 w3-border w3-theme-border w3-margin-bottom w3-hide-small"
-            >
+            <div class="w3-container w3-display-container w3-round w3-theme-l4 w3-border w3-theme-border w3-margin-bottom w3-hide-small">
               <span
                 onclick="this.parentElement.style.display='none'"
                 class="w3-button w3-theme-l3 w3-display-topright"
@@ -299,6 +299,32 @@ Profile
               </div>
             </div>
             <!--The Create Post Section Ends here -->
+
+            {% if friend_posts %}
+              {% for post in friend_posts %}
+                <div class="w3-container w3-card w3-white w3-round w3-margin">
+                  <br />
+                  <img src="/w3images/avatar5.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width: 60px" />
+                  <span class="w3-right w3-opacity">16 min</span>
+                  <h4>{{ post.author }}</h4> <!-- Assuming author's name is included in post data -->
+                  <br />
+                  <hr class="w3-clear" />
+                  <p>{{ post.content }}</p> <!-- Assuming post content is included in post data -->
+                  <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom">
+                    <i class="fa fa-thumbs-up"></i> Agree
+                  </button>
+                  <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom">
+                    <i class="fa fa-comment"></i> Comment
+                  </button>
+                  <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom">
+                    <i class="fa fa-thumbs-down"></i> Disagree
+                  </button>
+                </div>
+              {% endfor %}
+            {% else %}
+              <p>No friend posts found</p>
+            {% endif %}
+
             <div class="w3-container w3-card w3-white w3-round w3-margin">
               <br />
               <img

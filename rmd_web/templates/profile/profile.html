@@ -10,6 +10,51 @@ Profile
 
 <div class="w3-container w3-content" style="max-width: 1400px; margin-top: 80px">
 {% block content %}
+<style>
+  .like-icon-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 0;
+    font-size: inherit; 
+  }
+
+  .like-icon-btn i {
+    color: #007bff;
+  }
+  .dislike-icon-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  font-size: inherit; /* Adjust font size if necessary */
+  }
+
+  /* Style the icon to your liking */
+  .dislike-icon-btn i {
+  color: #dc3545; 
+  }
+
+  .comment-icon-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  font-size: inherit; /* Adjust font size if necessary */
+  }
+
+  /* Style the icon to your liking */
+  .comment-icon-btn i {
+  color: #ffc107; /* Change the color of the icon */
+  }
+
+</style>  
+  <div class="w3-container w3-content" style="max-width: 1400px; margin-top: 80px">
+    <h1> Logged in as: {{ request.user.username}} </h>
+    <h1> Logged in as: {{ request.user.email}} </h>
+    <h1> Logged in as: {{ request.user.id}} </h>
+        
+
 
 <style>
 .profile-box {
@@ -54,6 +99,7 @@ Profile
       <h2>Profile Information</h2>
     </div>
 
+
     
 
     <!-- Profile Section -->
@@ -80,8 +126,189 @@ Profile
   </div>
 </div>
 
+<a href="{% url 'account_logout' %}">Logout</a>
+<a href="../google/login/?process=login">Signup</a>
+<br>
+{% comment %} <h1> User Information: {{ context.user_information }} </h1> {% endcomment %}
+
+<h1>User Information</h1>
+<ul>
+    <li><strong>First Name:</strong> {{user_information.first_name}}</li>
+    <li><strong>Last Name:</strong> {{user_information.last_name}}</li>
+    <li><strong>Email:</strong> {{user_information.email}}</li>
+    <li><strong>Email Visibility:</strong> {{user_information.email_visability}}</li>
+    <li><strong>Professional Background:</strong> {{user_information.profession_background}}</li>
+    <li><strong>Social Media:</strong> 
+      <ul>
+        {% for platform in user_information.social_media %}
+            <li>{{ platform }}</li>
+        {% endfor %}
+    </ul>
+    </li>
+    <li><strong>Interests:</strong></li>
+      <ul>
+          {% for platform in user_information.interests %}
+            <li>{{ platform }}</li>
+          {% endfor %}
+      </ul>
+    <li><strong>Profile Picture:</strong> 
+      <img
+      src="{{user_information.profile_picture}}"
+      class="w3-circle"
+      style="height: 106px; width: 106px"
+      alt="Avatar"
+    />
+        
+        {% comment %} <img src="{{context.user_information.profile_picture}}" alt="Profile Picture"> {% endcomment %}
+    </li>
+</ul>
+<!-- In your home.html template -->
+
+<div class="w3-col m7">
+  <div class="w3-row-padding">
+    <div class="w3-col m12">
+        <div class="w3-card w3-round w3-white">
+            <div class="w3-container w3-padding">
+                <h6 class="w3-opacity">Create a new Post</h6>
+                <form method="post" enctype="multipart/form-data" name="add_post" id="add_post_form">
+                  {% csrf_token %}
+                  <textarea id="comment" name="comment" rows="4" cols="50" class="w3-border w3-padding" placeholder="Write something..."></textarea>
+                  <label for="picture">Picture:</label>
+                  <input type="file" id="picture" name="picture"><br>
+                  <input type="hidden" name="action" value="add_post">
+                  <button type="submit" class="w3-button w3-theme">
+                    <i class="fa fa-pencil"></i>  Post
+                  </button>
+                </form>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <!--The Create Post Section Ends here -->
+  {% if profile_posts %}
+    {% for post in profile_posts %}
+    <div class="w3-container w3-card w3-white w3-round w3-margin">
+    <br />
+    <img
+      src="/w3images/avatar2.png"
+      alt="Avatar"
+      class="w3-left w3-circle w3-margin-right"
+      style="width: 60px"
+    />
+    <span class="w3-right w3-opacity">1 min</span>
+    <h4>John Doe</h4>
+    <br />
+    <hr class="w3-clear" />
+    <p>{{ post.post_content }}</p>
+    {% if post.post_image_url %}
+    <div class="w3-row-padding" style="margin: 0 -16px">
+      <div class="w3-half">
+        <img
+          src="{{ post.post_image_url }}"
+          style="width: 100%"
+          alt="Post Image"
+          class="w3-margin-bottom"
+        />
+      </div>
+    </div>
+    {% endif %}
+    <div class="w3-row-padding" style="margin: 0 -16px">
+      <form action="{% url 'profile' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="like">
+        <input type="hidden" name="post_id" value="{{ post.id }}">
+
+        <button type="submit" class="w3-button w3-theme-d1 w3-margin-bottom">
+          <i class="fa fa-thumbs-up"></i> Agree
+        </button>
+      </form>
+      <form action="{% url 'profile' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="dislike">
+        <input type="hidden" name="post_id" value="{{ post.id }}">
+        <button type="submit" class="w3-button w3-theme-d1 w3-margin-bottom">
+          <i class="fa fa-thumbs-down"></i> Disagree
+        </button>
+      </form>
+      <form action="{% url 'profile' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="comment">
+        <input type="hidden" name="post_id" value="{{ post.id }}">
+        <button type="submit" class="w3-button w3-theme-d2 w3-margin-bottom">
+          <i class="fa fa-comment"></i> Comment
+        </button>
+      </form>
+    </div>
+    </div>
+
+    {% endfor %}
+  {% else %}
+  <p>No posts found</p>
+  {% endif %}
+  
+
+</div>
+  
+
+
 {% endblock content %}
 
 
 
+
+{% comment %} <form method="post" enctype="multipart/form-data" name="add_post">
+  {% csrf_token %}
+  <label for="comment">Comment:</label><br>
+  <textarea id="comment" name="comment" rows="4" cols="50"></textarea><br>
+  <label for="picture">Picture:</label>
+  <input type="file" id="picture" name="picture"><br>
+  <input type="hidden" name="action" value="add_post"> <!-- Add this line -->
+  <button type="submit">Submit</button>
+</form>
+{% if profile_posts %}
+    <div class="posts">
+        {% for post in profile_posts %}
+            <div class="post">
+                {% if post.post_image_url %}
+                    <img src="{{ post.post_image_url.url }}" alt="Post Image">
+                {% endif %}
+                <p>Post Content: {{ post.post_content }}</p>
+                <form action="{% url 'profile' %}" method="post">
+                  {% csrf_token %}
+                  <input type="hidden" name="action" value="like">
+                  <button type="submit" class="like-icon-btn">
+                      <!-- Add your like icon here, for example, using Font Awesome -->
+                      <i class="fas fa-thumbs-up"></i> <!-- Adjust the icon class as needed -->
+                  </button>
+              </form> 
+              <form action="{% url 'profile' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="dislike">
+                
+                <!-- Add any other fields for Form 2 here -->
+            
+                <button type="submit" class="dislike-icon-btn">
+                    <!-- Add your dislike icon here, for example, using Font Awesome -->
+                    <i class="fas fa-thumbs-down"></i> <!-- Adjust the icon class as needed -->
+                </button>
+            </form>
+            <form action="{% url 'profile' %}" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="action" value="comment">
+              
+              <!-- Add any other fields for Form 2 here -->
+          
+              <button type="submit" class="comment-icon-btn">
+                  <!-- Add your comment icon here, for example, using Font Awesome -->
+                  <i class="fas fa-comment"></i> <!-- Adjust the icon class as needed -->
+              </button>
+          </form>
+          
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>No posts found</p>
+{% endif %} {% endcomment %}
 
