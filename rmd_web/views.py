@@ -42,15 +42,15 @@ def upload_image(request):
 ######################################################################################################################
 # HOME
 def home(request):
-    print(request.user)
+    # print(request.user)
     if request.user.is_authenticated:
         user_id = request.user.email
         user_information = get_user_profile(user_id)
         
         friend_requests = user_information.get('friend_requests', [])
-        print(friend_requests)
+        # print(friend_requests)
         friends = user_information.get('friends', [])  # Retrieve the 'friends' list or an empty list if not present
-        print(friends)
+        # print(friends)
         # friend_requests = get_user_friend_request(user_information)
         all_friends_posts = get_friends_posts(friends)
     
@@ -99,6 +99,8 @@ def home(request):
             
             if action == "accept_friend_request":
                 # Example of handling friend request decline
+                array_placement_id = request.POST.get('array_id')
+                print('array_placement_id', array_placement_id)
                 sender_email = request.POST.get('sender_id')
                 recipient_email = request.user.email  # Assuming recipient is the current user
 
@@ -198,7 +200,7 @@ def profile(request):
     return render(request, 'profile/profile.html', context)
 
 def get_individuals_profile(request):
-    print(request.user)
+    # print(request.user)
     return render(request, 'profile/profile.html')
     
 def create_user(request):
@@ -231,8 +233,8 @@ def create_user(request):
     return render(request, 'profile/create_user.html')
 
 def edit_user(request):
-    print(request.user.id)
-    print(request.user.email)
+    # print(request.user.id)
+    # print(request.user.email)
     
     
     user_id = request.user.email
@@ -296,19 +298,19 @@ def search_results(request):
     query_param = request.GET.get('query', '')
     # Get the query parameter 'search' from the URL
     search_param = request.GET.get('search', '')
-    print("Search_results",query_param, search_param)
+    # print("Search_results",query_param, search_param)
     # Now you can use the query_param and search_param to fetch information
     # You can process the query and search parameters as needed
     search_result = search_profiles_single_term(query_param)
-    print(search_result)
+    # print(search_result)
     # For example, you can render a template with the query and search parameters
     
     
     if request.method == 'POST':
         sender_id = request.user.email
         recipient_id = request.POST.get('recipient_id')
-        print('sender_id', sender_id)
-        print('recipient_id', recipient_id)
+        # print('sender_id', sender_id)
+        # print('recipient_id', recipient_id)
         # Assume you have a Firestore collection named 'friend_requests'
         send_friend_request(sender_id, recipient_id)
         # messages.success(request, 'Friend request sent successfully.')
