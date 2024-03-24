@@ -18,27 +18,7 @@ from .static.functions.search import search_users
 # from .static.functions.friend_request import
 # from .static.functions.post import
 
-######################################################################################################################
-def upload_image(request):
-       if request.method == 'POST':
-           # Get the uploaded image from the request
-            uploaded_image = request.FILES['image']
-            image_upload(uploaded_image)
-    
-        #    # Initialize Firebase
-        #    cred = credentials.Certificate('path/to/serviceAccountKey.json')  # Replace with the path to your service account key JSON file
-        #    firebase_admin.initialize_app(cred, {
-        #        'storageBucket': 'your-bucket-name.appspot.com' # Replace with your Firebase Storage bucket name
-        #    })
-           # Upload Image
-        #    bucket = storage.bucket()
-        #    blob = bucket.blob('path/to/' + uploaded_image.name)  # Replace with the desired path and name for the uploaded image in Firebase Storage
-        #    blob.upload_from_file(uploaded_image)
 
-        #    print('Image uploaded successfully')
-
-
-       return render(request, 'image_upload.html')
 ######################################################################################################################
 # HOME
 def home(request):
@@ -54,7 +34,6 @@ def home(request):
         # friend_requests = get_user_friend_request(user_information)
         # all_friends_posts = get_friends_posts(friends)
         all_friends_posts = get_friends_posts('elliott.t.elijah@gmail.com')
-    
     
         if request.method == 'POST':
             print("Post button was clicked")
@@ -107,13 +86,6 @@ def home(request):
 
                 # Call the decline_friend_request function
                 result = accept_friend_request(sender_email, recipient_email)
-
-                # if result == "Friend request accepted successfully":
-                #     # If the friend request was declined successfully, return success response
-                #     return HttpResponse("Friend request accepted successfully", status=200)
-                # else:
-                # # If there was an error (e.g., sender or recipient profile not found), return error response
-                #     return HttpResponse(result, status=400)
                 
             if action == "decline_friend_request":
                 # Example of handling friend request decline
@@ -122,13 +94,6 @@ def home(request):
 
                 # Call the decline_friend_request function
                 result = decline_friend_request(sender_email, recipient_email)
-
-                # if result == "Friend request declined successfully":
-                #     # If the friend request was declined successfully, return success response
-                #     return HttpResponse("Friend request declined successfully", status=200)
-                # else:
-                # # If there was an error (e.g., sender or recipient profile not found), return error response
-                #     return HttpResponse(result, status=400)
     
         context = {
             'user_information': user_information,
@@ -146,9 +111,7 @@ def home(request):
             'friend_requests': None
         }
         return render(request, 'home.html', context)
-        
-    
-    
+
 ######################################################################################################################
 
 ######################################################################################################################
@@ -237,7 +200,6 @@ def edit_user(request):
     # print(request.user.id)
     # print(request.user.email)
     
-    
     user_id = request.user.email
     # user_id = str(request.user.id)
 
@@ -316,82 +278,14 @@ def search_results(request):
         send_friend_request(sender_id, recipient_id)
         # messages.success(request, 'Friend request sent successfully.')
         
-
     context = {
         'query': query_param, 
         'search': search_param,
         'search_results' :  search_result
     }
     return render(request, 'pages/search_results.html', context)
-    
-# def search_results(request):
-#     print('Inside search_results')
-#     query = request.GET.get('query')
-#     if query:
-#         results = search_users(query)
-#     else:
-#         results = []
-#     return render(request, 'pages/search_results.html', {'results': results, 'query': query})
 ######################################################################################################################
-# POSTS
-
-# def create_post(request, username):
-#     if request.method == 'POST':
-#         post_data = {
-#             'email': email,
-#             'first_name': request.POST.get('first_name'),
-#             'last_name': request.POST.get('last_name'),
-#             'profile_picture': request.POST.get('profile_picture'),
-#             'professional_background': request.POST.getlist('professional_background'),
-#             'social_media': social_media,
-#             'interests': request.POST.getlist('interests'),
-#             'privacy_settings': {'email_visibility': request.POST.get('email_visibility')}
-#         }
-#         create_post(post_data)
-#         return redirect('profile_created')  # Redirect to a page indicating profile creation success
-    
-    
-#     if request.method == 'POST':
-#         form = PostForm(request.POST)
-#         if form.is_valid():
-#             content = form.cleaned_data['content']
-#             user_id = request.user.id  # Assuming you have user authentication set up properly
-
-#             # Store the post in Firestore
-#             db = firestore.client()
-#             doc_ref = db.collection('posts').document()
-#             doc_ref.set({
-#                 'user_id': user_id,
-#                 'content': content
-#             })
-
-#             return redirect('profile', username=username)
-#     else:
-#         form = PostForm()
-#     return render(request, 'create_post.html', {'form': form})
-
-# def add_comment(request, post_id):
-#     # Implement adding a comment
-#     # Retrieve the post using post_id
-#     # Add a comment to the post
-#     user_id = request.user.email
-#     add_comment()
-#     return JsonResponse({"success": True})
-
-# def like_post(request, post_id):
-#     # Implement liking a post
-#     # Retrieve the post using post_id
-#     # Increment the likes count for the post
-#     return JsonResponse({"success": True})
-
-# def dislike_post(request, post_id):
-#     # Implement disliking a post
-#     # Retrieve the post using post_id
-#     # Increment the dislikes count for the post
-#     return JsonResponse({"success": True})
-
-######################################################################################################################
-
+   
 ######################################################################################################################
 # MESSAGES
 
@@ -458,5 +352,74 @@ def send_message(request):
 
 ######################################################################################################################
 # 
+
+######################################################################################################################
+
+######################################################################################################################
+def upload_image(request):
+       if request.method == 'POST':
+           # Get the uploaded image from the request
+            uploaded_image = request.FILES['image']
+            image_upload(uploaded_image)
+       return render(request, 'image_upload.html')
+######################################################################################################################
+
+######################################################################################################################
+# POSTS
+
+# def create_post(request, username):
+#     if request.method == 'POST':
+#         post_data = {
+#             'email': email,
+#             'first_name': request.POST.get('first_name'),
+#             'last_name': request.POST.get('last_name'),
+#             'profile_picture': request.POST.get('profile_picture'),
+#             'professional_background': request.POST.getlist('professional_background'),
+#             'social_media': social_media,
+#             'interests': request.POST.getlist('interests'),
+#             'privacy_settings': {'email_visibility': request.POST.get('email_visibility')}
+#         }
+#         create_post(post_data)
+#         return redirect('profile_created')  # Redirect to a page indicating profile creation success
+    
+    
+#     if request.method == 'POST':
+#         form = PostForm(request.POST)
+#         if form.is_valid():
+#             content = form.cleaned_data['content']
+#             user_id = request.user.id  # Assuming you have user authentication set up properly
+
+#             # Store the post in Firestore
+#             db = firestore.client()
+#             doc_ref = db.collection('posts').document()
+#             doc_ref.set({
+#                 'user_id': user_id,
+#                 'content': content
+#             })
+
+#             return redirect('profile', username=username)
+#     else:
+#         form = PostForm()
+#     return render(request, 'create_post.html', {'form': form})
+
+# def add_comment(request, post_id):
+#     # Implement adding a comment
+#     # Retrieve the post using post_id
+#     # Add a comment to the post
+#     user_id = request.user.email
+#     add_comment()
+#     return JsonResponse({"success": True})
+
+# def like_post(request, post_id):
+#     # Implement liking a post
+#     # Retrieve the post using post_id
+#     # Increment the likes count for the post
+#     return JsonResponse({"success": True})
+
+# def dislike_post(request, post_id):
+#     # Implement disliking a post
+#     # Retrieve the post using post_id
+#     # Increment the dislikes count for the post
+#     return JsonResponse({"success": True})
 
 ######################################################################################################################
