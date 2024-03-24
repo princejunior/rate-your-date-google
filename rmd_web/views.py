@@ -10,6 +10,8 @@ from .static.functions.fire import get_user_profile, create_user_profile, edit_u
 from .static.functions.fire import get_user_post, get_friends_posts, add_post, add_comment, like_post,dislike_post 
 from .static.functions.fire import image_upload, get_messages, send_messages, search_profiles, search_profiles_single_term
 from .static.functions.fire import get_user_friend_request, send_friend_request, accept_friend_request, decline_friend_request
+from .static.functions.fire import create_group_date
+
 from .static.functions.search import search_users
 # from .static.functions.ads import
 # from .static.functions.friend_request import
@@ -155,7 +157,32 @@ def profile(request):
             
             # add_comment()
             return redirect('profile')
-    
+
+        if action == 'create_group_date':
+            print("create_group_date button was clicked")
+            creator_id = request.user.email
+            group_date_information =  {
+                'creator_id': creator_id,
+                'title': request.POST.get('title'), 
+                'image': request.POST.get('image'), 
+                'about_date': request.POST.get('about_date'), 
+                'type': request.POST.get('type'),
+                'specifications': request.POST.get('specifications'), 
+                'start_date': request.POST.get('start_date'),
+                'start_time': request.POST.get('start_time'),
+                'end_date': request.POST.get('end_date'),
+                'end_time': request.POST.get('end_time'),
+                'maxParticipants': request.POST.get('maxParticipants'),
+                'participants': request.POST.get('participants'),
+                #friends/connections or for the public
+                'privacy': request.POST.get('privacy'),
+                #expired or not expired
+                'expired': False, 
+            }   
+            
+            create_group_date(group_date_information)
+            
+            return redirect('profile')
     context = {
        'user_information': user_information,
        'profile_posts': profile_posts,
