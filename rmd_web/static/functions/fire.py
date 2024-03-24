@@ -109,15 +109,57 @@ def get_feedback(feedback_id):
 
 ######################################################################################################################
 # GROUP_DATES
-def add_group_date(group_date_data):
+
+def create_group_date(group_date_data):
+    if group_date_data['image'] is not None:
+        group_date_url_image = image_upload(group_date_data['image'], "group_dates")
+    else:
+        group_date_url_image = None
     doc_ref = db.collection('group_dates').document()
     doc_ref.set({
         'creator_id': group_date_data['creator_id'],
-        'details': group_date_data['details'],
+        'details': {
+            'title': group_date_data['title'], 
+            'image': group_date_url_image,
+            'image': group_date_data['image'], 
+            'about_date': group_date_data['about_date'],  
+            'type': group_date_data['type'],
+            'specifications': group_date_data['specifications'],
+            'start_date': group_date_data['start_date'],
+            'start_time': group_date_data['start_time'],
+            'end_date': group_date_data['end_date'],
+            'end_time': group_date_data['end_time'],
+        },
         'maxParticipants': group_date_data['maxParticipants'],
         'participants': group_date_data['participants'],
+        #friends/connections or for the public
         'privacy': group_date_data['privacy'],
-        'status': group_date_data['status'],
+        #expired or not expired
+        'expired': group_date_data['expired'], 
+    })
+    return doc_ref.id
+
+def participated_group_date():
+    group_date_data = []
+    #profile ids
+    participants = [] 
+    participants.append(group_date_data)
+    
+    doc_ref = db.collection('created_group_dates').document()
+
+    doc_ref.set({
+        'details': {
+            'title': group_date_data['title'], 
+            'image': group_date_data['image'],
+            'image': group_date_data['image'], 
+            'about_date': group_date_data['about_date'],  
+            'type': group_date_data['type'],
+            'specifications': group_date_data['specifications'],
+            'start_date': group_date_data['start_date'],
+            'start_time': group_date_data['start_time'],
+            'end_date': group_date_data['end_date'],
+            'end_time': group_date_data['end_time'],
+        },
     })
     return doc_ref.id
 
@@ -129,6 +171,14 @@ def get_group_date(group_date_id):
     else:
         print(f"No group date found with ID: {group_date_id}")
         return None
+
+def update_group_date(document_id, updated_data):
+    db.collection('group_dates').document(document_id).update(updated_data)
+    return f"Document with ID {document_id} updated successfully."
+
+def delete_group_date(document_id):
+    db.collection('group_dates').document(document_id).delete()
+    return f"Document with ID {document_id} deleted successfully."
 
 ######################################################################################################################
 
