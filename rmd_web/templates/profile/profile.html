@@ -1,14 +1,10 @@
-<!-- <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> -->
-
-
-  {% extends "navbar.html" %}
+{% extends "navbar.html" %}
 {% load static %}
 {% block title %}
 Profile
 {% endblock %}
+<!-- <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> -->
 
-
-<div class="w3-container w3-content" style="max-width: 1400px; margin-top: 80px">
 {% block content %}
 <style>
   .like-icon-btn {
@@ -48,16 +44,8 @@ Profile
   color: #ffc107; /* Change the color of the icon */
   }
 
-</style>  
-  <div class="w3-container w3-content" style="max-width: 1400px; margin-top: 80px">
-    <h1> Logged in as: {{ request.user.username}} </h>
-    <h1> Logged in as: {{ request.user.email}} </h>
-    <h1> Logged in as: {{ request.user.id}} </h>
-        
-
-
-<style>
-.profile-box {
+  {% comment %} Shelton added {% endcomment %}
+  .profile-box {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); /* Add some shadow for depth */
     margin-top: 20px; /* Additional spacing from top */
     margin-bottom: 20px;
@@ -65,7 +53,7 @@ Profile
     margin: auto;
   }
 
-.profile-header {
+  .profile-header {
     background-color: #f1f1f1; /* Light grey background */
     padding: 20px; /* Spacing around the header text */
     color: #333; /* Dark grey color for the text */
@@ -85,46 +73,42 @@ Profile
     padding-bottom: 20px; /* Spacing at the bottom */
   }
 
-  /* .w3-container {
+  .w3-container {
     max-width: 8000px; /* Adjusted max-width for a narrower profile box */
     /* margin: auto; Centers the container */
-  /*  */
-
-</style>
-
+  }
+  
+</style>  
+<div class="w3-container w3-content" style="max-width: 1400px; margin-top: 80px">
+  {% comment %} <h1> Logged in as: {{ request.user.username}} </h>
+  <h1> Logged in as: {{ request.user.email}} </h>
+  <h1> Logged in as: {{ request.user.id}} </h> {% endcomment %}
+        
   <div class="w3-card w3-round w3-white w3-padding-large">
-    
     <div class="w3-card w3-round profile-box">
-    <div class="profile-header w3-center">
-      <h2>Profile Information</h2>
+      <div class="profile-header w3-center">
+        <h2>Profile Information</h2>
+      </div>
+
+      <!-- Profile Section -->
+      <div class="profile-info">
+        <p class="w3-large"><b>Username:</b> {{ request.user.username }}</p>
+        <p class="w3-large"><b>Email:</b> {{ request.user.email }}</p>
+        <p class="w3-large"><b>User ID:</b> {{ request.user.id }}</p>
+      </div>
+
+      <!-- Action Buttons -->
+      <divc class="action-buttons">
+        <div class="w3-section">
+          <a href="{% url 'edit_profile' %}" class="w3-button w3-teal w3-round">Edit Profile</a>
+          <a href="{% url 'account_logout' %}" class="w3-button w3-red w3-round">Logout</a>
+          <a href="../google/login/?process=login" class="w3-button w3-blue w3-round">Signup</a>
+        </div>
+      </div>
     </div>
-
-
-    
-
-    <!-- Profile Section -->
-    <div class="profile-info">
-    <p class="w3-large"><b>Username:</b> {{ request.user.username }}</p>
-    <p class="w3-large"><b>Email:</b> {{ request.user.email }}</p>
-    <p class="w3-large"><b>User ID:</b> {{ request.user.id }}</p>
-    </div>
-
-<!-- Action Buttons -->
-    <divc class="action-buttons">
-      <div class="w3-section">
-
-      <a href="{% url 'edit_profile' %}" class="w3-button w3-teal w3-round">Edit Profile</a>
-
-      <a href="{% url 'account_logout' %}" class="w3-button w3-red w3-round">Logout</a>
-      <a href="../google/login/?process=login" class="w3-button w3-blue w3-round">Signup</a>
-    </div>
-
-    </div>
-     
-    </div>
-  </div>
   </div>
 </div>
+
 
 <a href="{% url 'account_logout' %}">Logout</a>
 <a href="../google/login/?process=login">Signup</a>
@@ -184,8 +168,10 @@ Profile
         </div>
     </div>
   </div>
-
   <!--The Create Post Section Ends here -->
+
+  <!--The User Post Sectionis displayed here -->
+
   {% if profile_posts %}
     {% for post in profile_posts %}
     <div class="w3-container w3-card w3-white w3-round w3-margin">
