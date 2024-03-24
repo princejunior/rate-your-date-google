@@ -52,7 +52,8 @@ def home(request):
         friends = user_information.get('friends', [])  # Retrieve the 'friends' list or an empty list if not present
         # print(friends)
         # friend_requests = get_user_friend_request(user_information)
-        all_friends_posts = get_friends_posts(friends)
+        # all_friends_posts = get_friends_posts(friends)
+        all_friends_posts = get_friends_posts('elliott.t.elijah@gmail.com')
     
     
         if request.method == 'POST':
@@ -107,12 +108,12 @@ def home(request):
                 # Call the decline_friend_request function
                 result = accept_friend_request(sender_email, recipient_email)
 
-                if result == "Friend request accepted successfully":
-                    # If the friend request was declined successfully, return success response
-                    return HttpResponse("Friend request accepted successfully", status=200)
-                else:
-                # If there was an error (e.g., sender or recipient profile not found), return error response
-                    return HttpResponse(result, status=400)
+                # if result == "Friend request accepted successfully":
+                #     # If the friend request was declined successfully, return success response
+                #     return HttpResponse("Friend request accepted successfully", status=200)
+                # else:
+                # # If there was an error (e.g., sender or recipient profile not found), return error response
+                #     return HttpResponse(result, status=400)
                 
             if action == "decline_friend_request":
                 # Example of handling friend request decline
@@ -122,12 +123,12 @@ def home(request):
                 # Call the decline_friend_request function
                 result = decline_friend_request(sender_email, recipient_email)
 
-                if result == "Friend request declined successfully":
-                    # If the friend request was declined successfully, return success response
-                    return HttpResponse("Friend request declined successfully", status=200)
-                else:
-                # If there was an error (e.g., sender or recipient profile not found), return error response
-                    return HttpResponse(result, status=400)
+                # if result == "Friend request declined successfully":
+                #     # If the friend request was declined successfully, return success response
+                #     return HttpResponse("Friend request declined successfully", status=200)
+                # else:
+                # # If there was an error (e.g., sender or recipient profile not found), return error response
+                #     return HttpResponse(result, status=400)
     
         context = {
             'user_information': user_information,
