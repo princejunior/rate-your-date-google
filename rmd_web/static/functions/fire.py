@@ -814,41 +814,7 @@ def get_friends_posts(friends_ids):
     all_posts.sort(key=lambda x: x['timestamp'], reverse=True)
     
     return all_posts
-
-# def get_friends_posts(friends_id):
     
-#      # Assuming you're using the Firestore client library
-#     doc_ref = db.collection('posts').where('target_user_id', '==', friend_id)
-#     docs = doc_ref.stream()
-
-#     posts = []
-#     for doc in docs:
-#         if doc.exists:
-#             post_data = doc.to_dict()
-#             post_data['id'] = doc.id  # Assuming the post ID is stored in 'id' field in Firestore
-#             posts.append(post_data)
-
-#     if not posts:
-#         print(f"No user post found for user_id: {friend_id}")
-#         return []
-
-#     # Sort posts by timestamp in descending order (most recent first)
-#     posts.sort(key=lambda x: x['timestamp'], reverse=True)
-    
-#     return posts
-    
-# def get_user_post(user_id):
-#     # Assuming you're using the Firestore client library
-#     doc_ref = db.collection('posts').where('target_user_id', '==', user_id)
-#     docs = doc_ref.stream()
-
-#     for doc in docs:
-#         if doc.exists:
-#             return doc.to_dict()
-
-#     print(f"No user post found for email: {user_id}")
-#     return None
-
 # Function to add a post to Firestore
 def add_post(user_id, target_user_id, post_content, post_image_url=None):
     print("inside add_post")
@@ -916,7 +882,6 @@ def like_post(post_id, current_user_id):
     print("Post liked")
     print("finished like_post()")
     
-
 # Function to dislike a post
 def dislike_post(post_id, current_user_id):
     # Reference the post document
@@ -945,6 +910,7 @@ def send_messages(user_id, message):
             'user_id': user_id,
             'timestamp': firestore.SERVER_TIMESTAMP
         })
+
 ######################################################################################################################
 
 ######################################################################################################################
