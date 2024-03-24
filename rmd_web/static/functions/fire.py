@@ -435,8 +435,6 @@ def dislike_post(post_id, current_user_id):
     
     print("Post disliked")
 
-    
-    
 ######################################################################################################################
 
 ######################################################################################################################
@@ -445,7 +443,6 @@ def get_messages():
     messages_ref = db.collection('messages').order_by('timestamp', direction=firestore.Query.DESCENDING).limit(10)
     messages = messages_ref.stream()
     return messages
-
 
 def send_messages(user_id, message):
     db.collection('messages').add({
@@ -535,8 +532,6 @@ def search_profiles_single_term(term):
     # print('profiles', profiles)
     return profiles
 
-
-
 def search_profiles(query):
    
     # Searches for profiles based on the provided query.
@@ -598,35 +593,35 @@ def accept_friend_request(sender_email, recipient_email):
     if not recipient_profile.exists:
         return "Recipient profile not found"
 
-    # Get the friend requests array from sender's profile
-    friend_requests_sender = sender_profile.to_dict().get('friend_requests', [])
-    # Remove the friend request from sender's profile
-    friend_requests_sender = [req for req in friend_requests_sender if req['sender_email'] != sender_email or req['recipient_email'] != recipient_email]
+    # # Get the friend requests array from sender's profile
+    # friend_requests_sender = sender_profile.to_dict().get('friend_requests', [])
+    # # Remove the friend request from sender's profile
+    # friend_requests_sender = [req for req in friend_requests_sender if req['sender_email'] != sender_email or req['recipient_email'] != recipient_email]
 
-    # Update sender's profile with modified friend requests array
-    sender_ref.update({'friend_requests': friend_requests_sender})
+    # # Update sender's profile with modified friend requests array
+    # sender_ref.update({'friend_requests': friend_requests_sender})
 
-    # Get the friend requests array from recipient's profile
-    friend_requests_recipient = recipient_profile.to_dict().get('friend_requests', [])
-    # Remove the friend request from recipient's profile
-    friend_requests_recipient = [req for req in friend_requests_recipient if req['sender_email'] != sender_email or req['recipient_email'] != recipient_email]
+    # # Get the friend requests array from recipient's profile
+    # friend_requests_recipient = recipient_profile.to_dict().get('friend_requests', [])
+    # # Remove the friend request from recipient's profile
+    # friend_requests_recipient = [req for req in friend_requests_recipient if req['sender_email'] != sender_email or req['recipient_email'] != recipient_email]
 
-    # Update recipient's profile with modified friend requests array
-    recipient_ref.update({'friend_requests': friend_requests_recipient})
+    # # Update recipient's profile with modified friend requests array
+    # recipient_ref.update({'friend_requests': friend_requests_recipient})
 
-    # Add each user to the other's friend list
-    sender_friends = sender_profile.to_dict().get('friends', [])
-    recipient_friends = recipient_profile.to_dict().get('friends', [])
+    # # Add each user to the other's friend list
+    # sender_friends = sender_profile.to_dict().get('friends', [])
+    # recipient_friends = recipient_profile.to_dict().get('friends', [])
 
-    # Add recipient to sender's friend list if not already present
-    if recipient_email not in sender_friends:
-        sender_friends.append(recipient_email)
-        sender_ref.update({'friends': sender_friends})
+    # # Add recipient to sender's friend list if not already present
+    # if recipient_email not in sender_friends:
+    #     sender_friends.append(recipient_email)
+    #     sender_ref.update({'friends': sender_friends})
 
-    # Add sender to recipient's friend list if not already present
-    if sender_email not in recipient_friends:
-        recipient_friends.append(sender_email)
-        recipient_ref.update({'friends': recipient_friends})
+    # # Add sender to recipient's friend list if not already present
+    # if sender_email not in recipient_friends:
+    #     recipient_friends.append(sender_email)
+    #     recipient_ref.update({'friends': recipient_friends})
 
     return "Friend request accepted successfully"
  
@@ -650,21 +645,21 @@ def decline_friend_request(sender_email, recipient_email):
     if not recipient_profile.exists:
         return "Recipient profile not found"
 
-    # Get the friend requests array from sender's profile
-    friend_requests_sender = sender_profile.to_dict().get('friend_requests', [])
-    # Remove the friend request from sender's profile
-    friend_requests_sender = [req for req in friend_requests_sender if req['sender_email'] != sender_email or req['recipient_email'] != recipient_email]
+    # # Get the friend requests array from sender's profile
+    # friend_requests_sender = sender_profile.to_dict().get('friend_requests', [])
+    # # Remove the friend request from sender's profile
+    # friend_requests_sender = [req for req in friend_requests_sender if req['sender_email'] != sender_email or req['recipient_email'] != recipient_email]
 
-    # Update sender's profile with modified friend requests array
-    sender_ref.update({'friend_requests': friend_requests_sender})
+    # # Update sender's profile with modified friend requests array
+    # sender_ref.update({'friend_requests': friend_requests_sender})
 
-    # Get the friend requests array from recipient's profile
-    friend_requests_recipient = recipient_profile.to_dict().get('friend_requests', [])
-    # Remove the friend request from recipient's profile
-    friend_requests_recipient = [req for req in friend_requests_recipient if req['sender_email'] != sender_email or req['recipient_email'] != recipient_email]
+    # # Get the friend requests array from recipient's profile
+    # friend_requests_recipient = recipient_profile.to_dict().get('friend_requests', [])
+    # # Remove the friend request from recipient's profile
+    # friend_requests_recipient = [req for req in friend_requests_recipient if req['sender_email'] != sender_email or req['recipient_email'] != recipient_email]
 
-    # Update recipient's profile with modified friend requests array
-    recipient_ref.update({'friend_requests': friend_requests_recipient})
+    # # Update recipient's profile with modified friend requests array
+    # recipient_ref.update({'friend_requests': friend_requests_recipient})
 
     return "Friend request declined successfully"
   
