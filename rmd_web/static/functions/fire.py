@@ -20,13 +20,6 @@ def get_user_profile(email):
         print(f"No user profile found for email: {user_id}")
         return None
 
-# # Example usage:
-# user_email = 'example@example.com'
-# user_profile = get_user_profile(user_email)
-# if user_profile:
-#     print("User Profile:")
-#     print(user_profile)
-
 def create_user_profile(user_profile_data):
     image_url = image_upload(user_profile_data['profile_picture'],"profile")
     doc_ref = db.collection('profiles').document(user_profile_data['email'])
@@ -45,16 +38,6 @@ def edit_user_profile(user_id, updated_data):
     doc_ref = db.collection('profiles').document(user_id)
     doc_ref.update(updated_data)
 
-# # Example usage:
-# user_email = 'example@example.com'
-# updated_data = {
-#     'fullName': 'Jane Doe',
-#     'profilePicture': 'new_profile_pic.jpg',
-#     'professionalBackground': ['Data Scientist'],
-#     'interests': ['Cooking', 'Traveling', 'Photography'],
-#     'privacySettings': {'email_visibility': 'public'}
-# }
-# edit_user_profile(user_email, updated_data)
 ######################################################################################################################
 
 ######################################################################################################################
@@ -76,19 +59,6 @@ def get_match(match_id):
         print(f"No match found with ID: {match_id}")
         return None
 
-# # Example usage:
-# match_data = {
-#     'userIds': ['user1_id', 'user2_id'],
-#     'timestamp': firestore.SERVER_TIMESTAMP
-# }
-
-# match_id = add_match(match_data)
-# print("Match added with ID:", match_id)
-
-# retrieved_match = get_match(match_id)
-# if retrieved_match:
-#     print("Retrieved Match:")
-#     print(retrieved_match)
 ######################################################################################################################
 
 ######################################################################################################################
@@ -115,23 +85,6 @@ def get_date_review(date_review_id):
         print(f"No date review found with ID: {date_review_id}")
         return None
 
-# # Example usage:
-# date_review_data = {
-#     'reviewerId': 'user1_id',
-#     'revieweeId': 'user2_id',
-#     'rating': 4.5,
-#     'comments': 'Had a great time!',
-#     'timestamp': firestore.SERVER_TIMESTAMP,
-#     'visibility': True
-# }
-
-# date_review_id = add_date_review(date_review_data)
-# print("Date review added with ID:", date_review_id)
-
-# retrieved_date_review = get_date_review(date_review_id)
-# if retrieved_date_review:
-#     print("Retrieved Date Review:")
-#     print(retrieved_date_review)
 ######################################################################################################################
 
 ######################################################################################################################
@@ -155,21 +108,6 @@ def get_feedback(feedback_id):
         print(f"No feedback found with ID: {feedback_id}")
         return None
 
-# # Example usage:
-# feedback_data = {
-#     'fromUserId': 'user1_id',
-#     'toUserId': 'user2_id',
-#     'content': 'Great work!',
-#     'timestamp': firestore.SERVER_TIMESTAMP
-# }
-
-# feedback_id = add_feedback(feedback_data)
-# print("Feedback added with ID:", feedback_id)
-
-# retrieved_feedback = get_feedback(feedback_id)
-# if retrieved_feedback:
-#     print("Retrieved Feedback:")
-#     print(retrieved_feedback)
 ######################################################################################################################
 
 ######################################################################################################################
@@ -319,41 +257,7 @@ def get_friends_posts(friends_ids):
     all_posts.sort(key=lambda x: x['timestamp'], reverse=True)
     
     return all_posts
-
-# def get_friends_posts(friends_id):
     
-#      # Assuming you're using the Firestore client library
-#     doc_ref = db.collection('posts').where('target_user_id', '==', friend_id)
-#     docs = doc_ref.stream()
-
-#     posts = []
-#     for doc in docs:
-#         if doc.exists:
-#             post_data = doc.to_dict()
-#             post_data['id'] = doc.id  # Assuming the post ID is stored in 'id' field in Firestore
-#             posts.append(post_data)
-
-#     if not posts:
-#         print(f"No user post found for user_id: {friend_id}")
-#         return []
-
-#     # Sort posts by timestamp in descending order (most recent first)
-#     posts.sort(key=lambda x: x['timestamp'], reverse=True)
-    
-#     return posts
-    
-# def get_user_post(user_id):
-#     # Assuming you're using the Firestore client library
-#     doc_ref = db.collection('posts').where('target_user_id', '==', user_id)
-#     docs = doc_ref.stream()
-
-#     for doc in docs:
-#         if doc.exists:
-#             return doc.to_dict()
-
-#     print(f"No user post found for email: {user_id}")
-#     return None
-
 # Function to add a post to Firestore
 def add_post(user_id, target_user_id, post_content, post_image_url=None):
     print("inside add_post")
@@ -421,7 +325,6 @@ def like_post(post_id, current_user_id):
     print("Post liked")
     print("finished like_post()")
     
-
 # Function to dislike a post
 def dislike_post(post_id, current_user_id):
     # Reference the post document
@@ -450,6 +353,7 @@ def send_messages(user_id, message):
             'user_id': user_id,
             'timestamp': firestore.SERVER_TIMESTAMP
         })
+
 ######################################################################################################################
 
 ######################################################################################################################
