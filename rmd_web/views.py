@@ -311,7 +311,6 @@ def edit_user(request):
     print(request.user.id)
     print(request.user.email)
     
-    
     user_id = request.user.email
     # user_id = str(request.user.id)
 
@@ -373,6 +372,7 @@ def send_friend_request_view(request):
 
 
 def search_results(request):
+<<<<<<< HEAD
     query = request.GET.get('query')
     if query:
         results = search_users(query)
@@ -456,6 +456,36 @@ def search_results(request):
 #     return JsonResponse({"success": True})
 
 ######################################################################################################################
+=======
+    # Get the query parameter 'query' from the URL
+    query_param = request.GET.get('query', '')
+    # Get the query parameter 'search' from the URL
+    search_param = request.GET.get('search', '')
+    # print("Search_results",query_param, search_param)
+    # Now you can use the query_param and search_param to fetch information
+    # You can process the query and search parameters as needed
+    search_result = search_profiles_single_term(query_param)
+    # print(search_result)
+    # For example, you can render a template with the query and search parameters
+    
+    
+    if request.method == 'POST':
+        sender_id = request.user.email
+        recipient_id = request.POST.get('recipient_id')
+        # print('sender_id', sender_id)
+        # print('recipient_id', recipient_id)
+        # Assume you have a Firestore collection named 'friend_requests'
+        send_friend_request(sender_id, recipient_id)
+        # messages.success(request, 'Friend request sent successfully.')
+        
+    context = {
+        'query': query_param, 
+        'search': search_param,
+        'search_results' :  search_result
+    }
+    return render(request, 'pages/search_results.html', context)
+######################################################################################################################
+>>>>>>> 3bcd1ee (cleaning up the clutter)
    
 ######################################################################################################################
 # MESSAGES
@@ -553,6 +583,75 @@ def create_event(request):
 
 ######################################################################################################################
 # 
+
+######################################################################################################################
+
+######################################################################################################################
+def upload_image(request):
+       if request.method == 'POST':
+           # Get the uploaded image from the request
+            uploaded_image = request.FILES['image']
+            image_upload(uploaded_image)
+       return render(request, 'image_upload.html')
+######################################################################################################################
+
+######################################################################################################################
+# POSTS
+
+# def create_post(request, username):
+#     if request.method == 'POST':
+#         post_data = {
+#             'email': email,
+#             'first_name': request.POST.get('first_name'),
+#             'last_name': request.POST.get('last_name'),
+#             'profile_picture': request.POST.get('profile_picture'),
+#             'professional_background': request.POST.getlist('professional_background'),
+#             'social_media': social_media,
+#             'interests': request.POST.getlist('interests'),
+#             'privacy_settings': {'email_visibility': request.POST.get('email_visibility')}
+#         }
+#         create_post(post_data)
+#         return redirect('profile_created')  # Redirect to a page indicating profile creation success
+    
+    
+#     if request.method == 'POST':
+#         form = PostForm(request.POST)
+#         if form.is_valid():
+#             content = form.cleaned_data['content']
+#             user_id = request.user.id  # Assuming you have user authentication set up properly
+
+#             # Store the post in Firestore
+#             db = firestore.client()
+#             doc_ref = db.collection('posts').document()
+#             doc_ref.set({
+#                 'user_id': user_id,
+#                 'content': content
+#             })
+
+#             return redirect('profile', username=username)
+#     else:
+#         form = PostForm()
+#     return render(request, 'create_post.html', {'form': form})
+
+# def add_comment(request, post_id):
+#     # Implement adding a comment
+#     # Retrieve the post using post_id
+#     # Add a comment to the post
+#     user_id = request.user.email
+#     add_comment()
+#     return JsonResponse({"success": True})
+
+# def like_post(request, post_id):
+#     # Implement liking a post
+#     # Retrieve the post using post_id
+#     # Increment the likes count for the post
+#     return JsonResponse({"success": True})
+
+# def dislike_post(request, post_id):
+#     # Implement disliking a post
+#     # Retrieve the post using post_id
+#     # Increment the dislikes count for the post
+#     return JsonResponse({"success": True})
 
 ######################################################################################################################
 

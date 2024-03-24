@@ -1,8 +1,14 @@
 {% load static %}
 <!DOCTYPE html>
+<<<<<<< HEAD
 <html lang="en">
 <head>
     <title>{% block title %}{% endblock %}</title>
+=======
+<html>
+  <head>
+  <title>{% block title %}{% endblock %}</title>
+>>>>>>> 3bcd1ee (cleaning up the clutter)
     {% comment %} <title>Rate My Date 2.0</title> {% endcomment %}
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -69,7 +75,14 @@
           </button>
           <div class="w3-dropdown-content w3-card-4 w3-bar-block" style="width: 300px">
             <a href="#" class="w3-bar-item w3-button">One new friend request</a>
+<<<<<<< HEAD
             <a href="#" class="w3-bar-item w3-button">John Doe posted on your wall</a>
+=======
+            <a href="#" class="w3-bar-item w3-button"
+              >John Doe posted on your wall</a
+            >
+
+>>>>>>> 3bcd1ee (cleaning up the clutter)
             <a href="#" class="w3-bar-item w3-button">Jane likes your post</a>
           </div>
         </div>
@@ -124,9 +137,23 @@
         {% endblock %}
     </div>
 
+<<<<<<< HEAD
     <!-- Footer -->
     <footer class="w3-container w3-theme-d5 footer" id="footer">
         <p>@2024 Intelectual Property. All rights reserved.</p>
+=======
+    <!-- Page Container -->
+    {% block content %}
+
+    {% endblock %}
+
+   
+
+    <!-- Footer -->
+
+    <footer class="w3-container w3-theme-d5">
+      <p>@2024 Intelectual Property. All rights reserved.</p>
+>>>>>>> 3bcd1ee (cleaning up the clutter)
     </footer>
 
     <script>

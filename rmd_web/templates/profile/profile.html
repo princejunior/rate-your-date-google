@@ -44,6 +44,7 @@ Profile
   color: #ffc107; /* Change the color of the icon */
   }
 
+<<<<<<< HEAD
   {% comment %} Shelton added {% endcomment %}
   .profile-box {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); /* Add some shadow for depth */
@@ -109,10 +110,20 @@ Profile
   </div>
 </div>
 
+=======
+</style> 
+<div class="w3-container w3-content" style="max-width: 1400px; margin-top: 80px">
+  <h1> Logged in as: {{ request.user.username}} </h>
+  <h1> Logged in as: {{ request.user.email}} </h>
+  <h1> Logged in as: {{ request.user.id}} </h>
+        
+<a href="{% url 'edit_profile' %}">Edit</a>
+>>>>>>> 3bcd1ee (cleaning up the clutter)
 
 <a href="{% url 'account_logout' %}">Logout</a>
 <a href="../google/login/?process=login">Signup</a>
 <br>
+<<<<<<< HEAD
 
 <h2>Create Group Date</h2>
   <form method="post" enctype="multipart/form-data" name="create_group_date" id="create_group_date">
@@ -155,6 +166,8 @@ Profile
     <input type="submit" value="Create Group Date">
   </form>
 
+=======
+>>>>>>> 3bcd1ee (cleaning up the clutter)
 
 <h1>User Information</h1>
 <ul>
@@ -274,6 +287,7 @@ Profile
 
 
 {% endblock content %}
+<<<<<<< HEAD
 
 
 
@@ -333,3 +347,5 @@ Profile
     <p>No posts found</p>
 {% endif %} {% endcomment %}
 
+=======
+>>>>>>> 3bcd1ee (cleaning up the clutter)
