@@ -7,7 +7,7 @@ from django.contrib import messages
 ######################################################################################################################
 # STATIC.FUNCTIONS
 from .static.functions.fire import get_user_profile, create_user_profile, edit_user_profile
-from .static.functions.fire import get_user_post, get_friends_posts, fetch_profile, add_post, add_comment, like_post,dislike_post 
+from .static.functions.fire import get_user_post, get_friends_posts, fetch_profile, get_user_events, add_post, add_comment, like_post,dislike_post 
 from .static.functions.fire import image_upload, get_messages, send_messages, search_profiles, search_profiles_single_term
 from .static.functions.fire import get_user_friend_request, send_friend_request, accept_friend_request, decline_friend_request
 from .static.functions.fire import create_group_date
@@ -24,11 +24,11 @@ from .static.functions.search import search_users
 ######################################################################################################################
 # HOME
 def home(request):
-    # print(request.user)
+    # print(request.user.uid)
     if request.user.is_authenticated:
+        print(request.user.is_authenticated)
         user_id = request.user.email
         user_information = get_user_profile(user_id)
-        
         friend_requests = user_information.get('friend_requests', [])
         # print(friend_requests)
         friends = user_information.get('friends', [])  # Retrieve the 'friends' list or an empty list if not present
@@ -121,8 +121,10 @@ def home(request):
 def user_profile(request):
     user_id = request.user.email
     profile_posts = get_user_post(request.user.email)
-    # print("User's profile",request.user)
+ 
     user_information = get_user_profile(user_id)
+    # profile_events = get_user_events(user_information['events'])
+    events, dates = get_user_events(user_information['events'])
     if request.method == 'POST':
         print("Post button was clicked")
         
@@ -164,6 +166,7 @@ def user_profile(request):
                 'creator_id': creator_id,
                 'title': request.POST.get('title'), 
                 'image': request.POST.get('image'), 
+                'type_date_event' : request.POST.get('type_date_event'),
                 'about_date': request.POST.get('about_date'), 
                 'type': request.POST.get('type'),
                 'specifications': request.POST.get('specifications'), 
@@ -185,6 +188,9 @@ def user_profile(request):
     context = {
        'user_information': user_information,
        'profile_posts': profile_posts,
+       'profile_events': events,
+       'profile_dates': dates,
+       
     }
     # print(context)
     return render(request, 'profile/user_profile.html', context)
@@ -236,6 +242,7 @@ def profile(request):
                 'creator_id': creator_id,
                 'title': request.POST.get('title'), 
                 'image': request.POST.get('image'), 
+                'type_date_event' : request.POST.get('type_date_event'),
                 'about_date': request.POST.get('about_date'), 
                 'type': request.POST.get('type'),
                 'specifications': request.POST.get('specifications'), 
@@ -428,6 +435,30 @@ def signup(request):
 # GROUP EVENT
 
 def create_event(request):
+    if request.method == 'POST':
+        print("create_group_date button was clicked")
+        creator_id = request.user.email
+        group_date_information =  {
+            'creator_id': creator_id,
+            'title': request.POST.get('title'), 
+            'image': request.POST.get('image'), 
+            'type_date_event' : request.POST.get('event_date'),
+            'about_date': request.POST.get('about_date'), 
+            'type': request.POST.get('type'),
+            'specifications': request.POST.get('specifications'), 
+            'start_date': request.POST.get('start_date'),
+            'start_time': request.POST.get('start_time'),
+            'end_date': request.POST.get('end_date'),
+            'end_time': request.POST.get('end_time'),
+            'maxParticipants': request.POST.get('maxParticipants'),
+            'participants': request.POST.get('participants'),
+            #friends/connections or for the public
+            'privacy': request.POST.get('privacy'),
+            #expired or not expired
+            'expired': False, 
+        }       
+        create_group_date(group_date_information)
+        return redirect('profile')
     return render(request, 'pages/create_event_post.html')
     
 
