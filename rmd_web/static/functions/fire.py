@@ -1129,7 +1129,27 @@ def get_user_friend_request(user_id):
 ######################################################################################################################
 
 ######################################################################################################################
-# 
+# EVENTS
+
+def get_user_events(user_event_ids):
+    events = []
+    dates = []
+    for event_id in user_event_ids:
+        doc_ref = db.collection('group_dates').document(event_id)
+        doc = doc_ref.get()
+        if doc.exists:
+            event_data = doc.to_dict()
+            if event_data['type_date_event'] == 'Event':
+                events.append(event_data)
+            elif event_data['type_date_event'] == 'Date':
+                dates.append(event_data)
+            else:
+                print(f"Unknown event type for event ID: {event_id}")
+        else:
+            print(f"No user event found for event ID: {event_id}")
+    return events, dates
+
+    
 
 ######################################################################################################################
 
