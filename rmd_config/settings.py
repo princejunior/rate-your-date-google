@@ -72,6 +72,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
+        # https://medium.com/@infowithkiiru/django-user-registration-with-google-67524cce5ab7
+        # 'DIRS': [BASE_DIR/'templates'], 
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -179,5 +181,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 ACCOUNT_AUTHENTICATION_METHOD = 'EMAIL'
 ACCOUNT_EMAIL_REQUIRED = True
+SITE_ID = 2
+LOGIN_REDIRECT_URL = 'edit_profile/'
+LOGOUT_REDIRECT_URL = 'signup/'
 ######################################################################################################################
 
