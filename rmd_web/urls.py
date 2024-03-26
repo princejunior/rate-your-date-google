@@ -15,40 +15,40 @@ urlpatterns = [
 
 ######################################################################################################################
 # 
-path('send_friend_request_view/', views.send_friend_request_view, name='send_friend_request_view'),
-path('send-friend-request/', views.send_friend_request, name='send_friend_request'),
-path('accept_friend_request/', views.send_friend_request, name='accept_friend_request'),
-path('accept_friend_request/', views.send_friend_request, name='accept_friend_request'),
-path('decline_friend_request/', views.send_friend_request, name='decline_friend_request'),
+    path('send_friend_request_view/', views.send_friend_request_view, name='send_friend_request_view'),
+    path('send-friend-request/', views.send_friend_request, name='send_friend_request'),
+    path('accept_friend_request/', views.send_friend_request, name='accept_friend_request'),
+    path('accept_friend_request/', views.send_friend_request, name='accept_friend_request'),
+    path('decline_friend_request/', views.send_friend_request, name='decline_friend_request'),
 
 ######################################################################################################################
 
 ######################################################################################################################
 # 
-path('search/', views.search_results, name='search_results'),
+    path('search/', views.search_results, name='search_results'),
 ######################################################################################################################
 
 ######################################################################################################################
 # 
-path('upload/', views.upload_image, name='upload_image'),
+    path('upload/', views.upload_image, name='upload_image'),
 ######################################################################################################################
 
 ######################################################################################################################
 # POSTS
-path('add_comment/<post_id>/', views.add_comment, name='add_comment'),
-path('like_post/<post_id>/', views.like_post, name='like_post'),
-path('dislike_post/<post_id>/', views.dislike_post, name='dislike_post'),
+    path('add_comment/<post_id>/', views.add_comment, name='add_comment'),
+    path('like_post/<post_id>/', views.like_post, name='like_post'),
+    path('dislike_post/<post_id>/', views.dislike_post, name='dislike_post'),
 ######################################################################################################################
 
 ######################################################################################################################
 # MESSAGES
-path('message/', views.messages, name='messages'),
-
-path('send_message/', views.send_message, name='send_message'),
+    path('message/', views.messages, name='messages'),
+    path('send_message/', views.send_message, name='send_message'),
 ######################################################################################################################
 
 ######################################################################################################################
-# 
+# AUTH
+    path('signup/', views.signup, name='signup')
 
 ######################################################################################################################
 
