@@ -4,32 +4,31 @@
 Search Results
 {% endblock %}
 
-
 {% block content %}
     <h1>Search Results</h1>
     <p>Query: {{ query }}</p>
     <p>Search: {{ search }}</p>
     {% for profile_data in search_results %}
-    <div class="profile-info">
-        <h2>{{ profile_data.first_name }} {{ profile_data.last_name }}</h2>
-        <p>Email: {{ profile_data.email }}</p>
-        <p>Professional Background: {{ profile_data.professional_background }}</p>
-        <p>Social Media: {{ profile_data.social_media }}</p>
-        <p>Interests: {{ profile_data.interests }}</p>
-        <p>Email Visibility: {{ profile_data.privacy_settings.email_visibility }}</p>
-        <img src="{{ profile_data.profile_picture }}" alt="Avatar"
-        class="w3-circle "
-        style="width: 60px" alt="Profile Picture">
-        <!-- Add more information as needed -->
-        {% comment %} <form action="{% url 'send_friend_request' %}" method="post"> {% endcomment %}
-        <form action="{% url 'search_results' %}"method="post">
-            {% csrf_token %}
-            <input type="hidden" name="recipient_id" value="{{ profile_data.email }}">
-            <button type="submit">Send Friend Request</button>
-        </form>          
-    </div>
-    
+        <div class="profile-info">
+            <h2>{{ profile_data.first_name }} {{ profile_data.last_name }}</h2>
+            <p>Email: {{ profile_data.email }}</p>
+            <p>Professional Background: {{ profile_data.professional_background }}</p>
+            <p>Social Media: {{ profile_data.social_media }}</p>
+            <p>Interests: {{ profile_data.interests }}</p>
+            <p>Email Visibility: {{ profile_data.privacy_settings.email_visibility }}</p>
+            <img src="{{ profile_data.profile_picture }}" alt="Avatar" class="w3-circle " style="width: 60px" alt="Profile Picture">
+            <form action="{% url 'send_friend_request' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="recipient_id" value="{{ profile_data.email }}">
+                <button type="submit">Send Friend Request</button>
+            </form>       
+            <a href="{% url 'profile_view' profile_data.first_name %}">View Profile</a>
+        </div> 
     {% endfor %}
-
-
 {% endblock %}
+
+<script>
+    function viewProfile(profileId) {
+        window.location.href = `/profile/${profileId}`;
+    }
+</script>

@@ -38,6 +38,10 @@ def edit_user_profile(user_id, updated_data):
     doc_ref = db.collection('profiles').document(user_id)
     doc_ref.update(updated_data)
 
+def fetch_profile(profile_id):
+    profile_ref = db.collection('profiles').document(profile_id)
+    profile_data = profile_ref.get().to_dict()
+    return profile_data
 ######################################################################################################################
 
 ######################################################################################################################
