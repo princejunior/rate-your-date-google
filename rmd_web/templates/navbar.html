@@ -1,10 +1,9 @@
 {% load static %}
 <!-- This is the layout! -->
-
 <!DOCTYPE html>
 <html>
   <head>
-  <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %}{% endblock %}</title>
     {% comment %} <title>Rate My Date 2.0</title> {% endcomment %}
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -25,6 +24,7 @@
       }
     </style>
   </head>
+
   <body class="w3-theme-l5">
     <!-- Navbar -->
     <div class="w3-top">
@@ -35,44 +35,57 @@
         <a href="{% url 'home' %}" class="w3-bar-item w3-button w3-padding-large w3-theme-d4">
           <i class="fa fa-home w3-margin-right"></i>Logo
         </a>
-        <a
-          href="#"
+        <a href="#" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="News">
+          <i class="fa fa-globe"></i>
+        </a>
+        {% if user.is_authenticated %}
+          <a href="{% url 'profile' %}" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Account Settings">
+            <i class="fa fa-user"></i>
+          </a>
+          <a href="{% url 'messages' %}"
           class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white"
-          title="News"
-          ><i class="fa fa-globe"></i
-        ></a>
-        <a
-          href="{% url 'profile' %}"
-          class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white"
-          title="Account Settings"
-          ><i class="fa fa-user"></i
-        ></a>
-        <a href="{% url 'messages' %}"
-          class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white"
-          title="Messages"
-          ><i class="fa fa-envelope"></i
-        ></a>
+          title="Messages">
+          <i class="fa fa-envelope"></i>
+        </a>
         <div class="w3-dropdown-hover w3-hide-small">
           <button class="w3-button w3-padding-large" title="Notifications">
-            <i class="fa fa-bell"></i
-            ><span class="w3-badge w3-right w3-small w3-green">3</span>
+            <i class="fa fa-bell"></i>
+            <span class="w3-badge w3-right w3-small w3-green">3</span>
           </button>
-          <div
-            class="w3-dropdown-content w3-card-4 w3-bar-block"
-            style="width: 300px"
-          >
+          <div class="w3-dropdown-content w3-card-4 w3-bar-block" style="width: 300px">
             <a href="#" class="w3-bar-item w3-button">One new friend request</a>
-            <a href="#" class="w3-bar-item w3-button"
-              >John Doe posted on your wall</a
-            >
-
+            <a href="#" class="w3-bar-item w3-button">John Doe posted on your wall</a>
             <a href="#" class="w3-bar-item w3-button">Jane likes your post</a>
           </div>
         </div>
-        <a href="accounts/signup/" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="signup_google">
-          {% comment %} <i class="fa fa-envelope"></i> {% endcomment %}
+        <a href="../accounts/signup/" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="signup_google">
           Sign Up
         </a>
+        {% else %}
+          <a href="../../accounts/signup/" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Account Settings">
+            <i class="fa fa-user"></i>
+          </a>
+          <a href="../../accounts/signup/"
+          class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white"
+          title="Messages">
+          <i class="fa fa-envelope"></i>
+        </a>
+        <div class="w3-dropdown-hover w3-hide-small">
+          <button class="w3-button w3-padding-large" title="Notifications">
+            <i class="fa fa-bell"></i>
+            <span class="w3-badge w3-right w3-small w3-green">3</span>
+          </button>
+          <div class="w3-dropdown-content w3-card-4 w3-bar-block" style="width: 300px">
+            <a href="#" class="w3-bar-item w3-button">One new friend request</a>
+            <a href="#" class="w3-bar-item w3-button">John Doe posted on your wall</a>
+            <a href="#" class="w3-bar-item w3-button">Jane likes your post</a>
+          </div>
+        </div>
+        <a href="../../accounts/signup/" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="signup_google">
+          Sign Up
+        </a>
+        {% endif %}
+
         <form method="GET" action="{% url 'search_results' %}" class="w3-bar-item">
           <input type="text" name="query" placeholder="Search by name">
           <input type="hidden" name="search" value="search">
@@ -97,8 +110,6 @@
     {% block content %}
 
     {% endblock %}
-
-   
 
     <!-- Footer -->
 
