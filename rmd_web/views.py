@@ -118,6 +118,8 @@ def home(request):
 
 ######################################################################################################################
 # PROFILE_&_USER
+def user_profile(request):
+    return render(request, 'profile/user_profile.html')
 
 def profile(request):
     user_id = request.user.email
