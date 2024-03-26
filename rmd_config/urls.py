@@ -24,7 +24,9 @@ urlpatterns = [
 
     
     path('accounts/', include('allauth.urls')),
-    path('accounts/profile/', views.profile, name="profile"),
+    path('accounts/profile/', views.user_profile, name="profile"),
+    # path('accounts/profile/', views.profile, name="profile"),
+    
     # path('accounts/google/login/?process=login', include('allauth.urls')),
     
     

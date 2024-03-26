@@ -101,13 +101,14 @@ Profile
 <div class="w3-container profile-container">
   <div class="profile-info">
     <div class="profile-info-left">
-      <h1>Jon Doe</h1>
+      <h1>{{user_information.first_name}} {{user_information.last_name}}</h1>
       <h3>Software Engineering Student | BYU - Idaho</h3>
+      <p>{{user_information.profession_background}}</p>
       <p>Friendly and Energetic!</p>
       <p>Rexburg, Idaho, United States</p>
     </div>
     <div class="profile-info-right">
-      <img src="https://via.placeholder.com/200x200" alt="Profile Picture">
+      <img src="{{user_information.profile_picture}}" alt="Profile Picture">
     </div>
   </div>
 

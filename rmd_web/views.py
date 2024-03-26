@@ -119,7 +119,76 @@ def home(request):
 ######################################################################################################################
 # PROFILE_&_USER
 def user_profile(request):
-    return render(request, 'profile/user_profile.html')
+    user_id = request.user.email
+    profile_posts = get_user_post(request.user.email)
+    # print("User's profile",request.user)
+    user_information = get_user_profile(user_id)
+    if request.method == 'POST':
+        print("Post button was clicked")
+        
+        action = request.POST.get('action')
+        print('action', action)
+        if action == 'add_post':
+            print("add_post button was clicked")
+            target_user_id = user_id
+            post_content = request.POST.get('comment')
+            post_image_url = request.FILES.get('picture')
+            add_post(user_id, target_user_id, post_content,post_image_url)
+            return redirect('profile')
+        
+        if action == 'like':
+            print("like_post button was clicked")
+            post_id = request.POST.get('post_id')
+            
+            like_post(post_id, user_id) 
+            print("post ID", post_id)
+            # pass
+            return redirect('profile')
+
+        if action == 'dislike':
+            print("dislike_post button was clicked")
+            post_id = request.POST.get('post_id')
+            dislike_post(post_id,user_id)
+            return redirect('profile')
+        
+        if action == 'comment':
+            print("comment button was clicked")
+            
+            # add_comment()
+            return redirect('profile')
+
+        if action == 'create_group_date':
+            print("create_group_date button was clicked")
+            creator_id = request.user.email
+            group_date_information =  {
+                'creator_id': creator_id,
+                'title': request.POST.get('title'), 
+                'image': request.POST.get('image'), 
+                'about_date': request.POST.get('about_date'), 
+                'type': request.POST.get('type'),
+                'specifications': request.POST.get('specifications'), 
+                'start_date': request.POST.get('start_date'),
+                'start_time': request.POST.get('start_time'),
+                'end_date': request.POST.get('end_date'),
+                'end_time': request.POST.get('end_time'),
+                'maxParticipants': request.POST.get('maxParticipants'),
+                'participants': request.POST.get('participants'),
+                #friends/connections or for the public
+                'privacy': request.POST.get('privacy'),
+                #expired or not expired
+                'expired': False, 
+            }   
+            
+            create_group_date(group_date_information)
+            
+            return redirect('profile')
+    context = {
+       'user_information': user_information,
+       'profile_posts': profile_posts,
+    }
+    # print(context)
+    return render(request, 'profile/user_profile.html', context)
+
 
 def profile(request):
     user_id = request.user.email
