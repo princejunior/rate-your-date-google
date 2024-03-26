@@ -1,0 +1,162 @@
+{% extends "navbar.html" %}
+
+{% block title %}
+Profile
+{% endblock %}
+
+
+{% block content %}
+<style>
+    .profile-container {
+      max-width: 1200px;
+      margin: auto;
+      margin-top: 25px; 
+      padding: 20px;
+      background: #D9D9D9;
+      border-radius: 10px;
+    }
+    .profile-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+    }
+    .profile-info-left {
+      flex: 1;
+    }
+    .profile-info-left h1, .profile-info-left h3 {
+      margin: 5px 0;
+    }
+    .profile-info-right img {
+      width: 200px;
+      height: auto;
+      border-radius: 50%;
+      border: 10px solid #fff;
+    }
+    .profile-buttons {
+        text-align: center;
+        margin-top: 20px;
+      }
+      .profile-buttons button {
+        margin: 0 10px;
+        padding: 10px 20px;
+        background: #00477A;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .profile-buttons .edit-profile-icon {
+        font-size: 20px;
+      }
+      .profile-buttons a {
+        text-decoration: none; /* Remove underline */
+        color: inherit; /* Inherit color from parent button */
+      }
+    .friend-list-container {
+      text-align: center;
+      margin-top: 20px;
+      padding: 20px;
+      background: #D9D9D9;
+      border-radius: 10px;
+    }
+    .friend-list-container img {
+      width: 50px;
+      height: auto;
+      border-radius: 50%;
+      border: 5px solid #fff;
+      margin: 0 10px;
+    }
+    .display-center-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 20vh;
+    }
+    
+    .display-w3-bar {
+        display: flex;
+        justify-content: center;
+        width: 100%; /* Make sure the bar spans the width of its container */
+    }
+    
+    .display-container {
+        margin: 0 auto; /* Center align the container */
+        width: 80%; /* Set a width for the container */
+    }
+
+    .tab {
+        display: none;
+    }
+    .tab.active {
+        display: block;
+    }
+</style>
+
+
+<div class="w3-container profile-container">
+  <div class="profile-info">
+    <div class="profile-info-left">
+      <h1>{{user_information.first_name}} {{user_information.last_name}}</h1>
+      <h3>Software Engineering Student | BYU - Idaho</h3>
+      <p>{{user_information.profession_background}}</p>
+      <p>Friendly and Energetic!</p>
+      <p>Rexburg, Idaho, United States</p>
+    </div>
+    <div class="profile-info-right">
+      <img src="{{user_information.profile_picture}}" alt="Profile Picture">
+    </div>
+  </div>
+
+  <div class="profile-buttons">
+    <button>
+        <a href="{% url 'create_event' %}">Create Event</a>
+    </button>
+    <button>Post Event</button>
+    <button>View Friends</button>
+    <button><i class="fas fa-user-edit edit-profile-icon"></i></button>
+
+  </div>
+</div>
+
+<div class="display-center-content">
+    <div class="display-w3-bar">
+        <button class="w3-bar-item w3-button" onclick="openTab('posts')">Posts</button>
+        <button class="w3-bar-item w3-button" onclick="openTab('events')">Events</button>
+        <button class="w3-bar-item w3-button" onclick="openTab('dates')">Dates</button>
+    </div>
+
+    <!-- Content Tab -->
+    <div id="posts" class="w3-container tab active">
+        <h2>Posts</h2>
+        <!-- Place your content here -->
+    </div>
+
+    <!-- Saved Tab -->
+    <div id="events" class="w3-container tab">
+        <h2>Events</h2>
+        <!-- Place your saved content here -->
+    </div>
+
+    <!-- Tagged Tab -->
+    <div id="dates" class="w3-container tab">
+        <h2>Dates</h2>
+        <!-- Place your tagged content here -->
+    </div>
+</div>
+
+  <script>
+    // JavaScript function to open the selected tab
+    function openTab(tabName) {
+      // Get all elements with class="tab" and hide them
+      const tabs = document.querySelectorAll('.tab');
+      tabs.forEach(tab => {
+        tab.classList.remove('active');
+      });
+  
+      // Show the current tab, and add an "active" class to the button that opened the tab
+      document.getElementById(tabName).classList.add('active');
+    }
+  </script>
+{% endblock %}

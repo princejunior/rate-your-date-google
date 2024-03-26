@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 from django.core.exceptions import MultipleObjectsReturned
 from django.http import JsonResponse, HttpResponse, HttpResponseServerError
 from django.shortcuts import render, redirect
@@ -7,7 +7,7 @@ from django.contrib import messages
 ######################################################################################################################
 # STATIC.FUNCTIONS
 from .static.functions.fire import get_user_profile, create_user_profile, edit_user_profile
-from .static.functions.fire import get_user_post, get_friends_posts, add_post, add_comment, like_post,dislike_post 
+from .static.functions.fire import get_user_post, get_friends_posts, fetch_profile, add_post, add_comment, like_post,dislike_post 
 from .static.functions.fire import image_upload, get_messages, send_messages, search_profiles, search_profiles_single_term
 from .static.functions.fire import get_user_friend_request, send_friend_request, accept_friend_request, decline_friend_request
 from .static.functions.fire import create_group_date
@@ -331,6 +331,20 @@ def edit_user(request):
         return redirect('profile')  # Redirect to a page indicating profile edit success
     return render(request, 'profile/edit_user.html')
 
+# def view_profile(request, profile_id):
+#     # Fetch the UserProfile object based on the profile_id
+#     profile = get_object_or_404(UserProfile, pk=profile_id)
+#     # Pass the profile object to the template for rendering
+#     return render(request, 'view_profile.html', {'profile': profile})
+
+def profile_view(request, profile_id):
+    # Fetch profile data from Firestore
+    profile_data = fetch_profile(profile_id)
+
+    if not profile_data:
+        return HttpResponse("Profile not found", status=404)
+
+    return render(request, 'profile.html', {'profile': profile_data})
 ######################################################################################################################
 
 ######################################################################################################################
