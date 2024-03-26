@@ -1,0 +1,127 @@
+{% extends "navbar.html" %}
+
+{% block title %}
+Create Date
+{% endblock %}
+
+{% block content %}
+<div class="w3-container w3-content">
+  <h2>Create Group Date</h2>
+  <div class="w3-card-4">
+      <div class="w3-container w3-padding">
+        <form method="post" enctype="multipart/form-data" name="create_group_date" id="create_group_date" class="w3-container">
+          {% csrf_token %}
+          <div class="w3-section">
+              <label for="title">Title:</label>
+              <input class="w3-input" type="text" id="title" name="title" required>
+          </div>
+      
+          <div class="w3-section">
+              <label for="event_date">Event or Date?</label>
+              <select class="w3-select" id="event_date" name="event_date">
+                  <option value="Event">Event</option>
+                  <option value="Date">Date</option>
+              </select>
+          </div>
+      
+          <div class="w3-section">
+              <label for="picture">Picture:</label>
+              <input class="w3-input" type="file" id="image" name="image">
+          </div>
+      
+          <div class="w3-section" id="about_date_section">
+              <label for="about_date">About Event:</label>
+              <textarea class="w3-input" id="about_date" name="about_date" rows="4" cols="50"></textarea>
+          </div>
+          <div class="w3-section" id="single_double_date_section">
+            <label for="single_double_date">Single or Group Event:</label>
+            <select class="w3-select" id="single_double_date" name="single_double_date">
+                <option value="Single">Single</option>
+                <option value="Group">Group</option>
+            </select>
+          </div>
+        
+
+              <div class="w3-section" id="specifications_about_date_section">
+                  <label for="specifications" id="specifications_about_date">Specifications about the Event:</label>
+                  <textarea class="w3-input" id="specifications" name="specifications" rows="4" cols="50"></textarea>
+              </div>
+
+              <div class="w3-section">
+                  <label for="start_date">Start Date:</label>
+                  <input class="w3-input" type="date" id="start_date" name="start_date" required>
+              </div>
+
+              <div class="w3-section">
+                  <label for="start_time">Start Time:</label>
+                  <input class="w3-input" type="time" id="start_time" name="start_time" required>
+              </div>
+
+              <div class="w3-section">
+                  <label for="end_date">End Date:</label>
+                  <input class="w3-input" type="date" id="end_date" name="end_date" required>
+              </div>
+
+              <div class="w3-section">
+                  <label for="end_time">End Time:</label>
+                  <input class="w3-input" type="time" id="end_time" name="end_time" required>
+              </div>
+
+              <div class="w3-section" id="max_participants_section">
+                  <label for="maxParticipants" id="max_participants_label">Max Participants for Event:</label>
+                  <input class="w3-input" type="number" id="maxParticipants" name="maxParticipants" required>
+              </div>
+
+              <div class="w3-section" id="privacy_section">
+                  <label for="privacy" id="privacy_label">Choose who you want to see your Event:</label>
+                  <select class="w3-select" id="privacy" name="privacy">
+                      <option value="friends">Friends/Connections</option>
+                      <option value="public">Public</option>
+                  </select>
+              </div>
+
+              <input type="hidden" name="action" value="create_group_date">
+              <button class="w3-button w3-green" id="submit_label" type="submit">Create Group Event</button>
+          </form>
+      </div>
+  </div>
+</div>
+<script>
+  document.getElementById('event_date').addEventListener('change', function () {
+    var selectedOption = this.value;
+    var aboutDateSection = document.getElementById('about_date_section');
+    var aboutDateLabel = aboutDateSection.querySelector('label');
+
+    var singleDoubleDateSection = document.getElementById('single_double_date_section');
+    var singleDoubleDateLabel = singleDoubleDateSection.querySelector('label');
+
+    var specificationsAboutDateSection = document.getElementById('specifications_about_date_section');
+    var specificationsAboutDateLabel = specificationsAboutDateSection.querySelector('label');
+
+    var privacySection = document.getElementById('privacy_section');
+    var privacyLabel = privacySection.querySelector('label');
+
+    var maxParticipantsSection = document.getElementById('max_participants_section');
+    var maxParticipantsLabel = maxParticipantsSection.querySelector('label');
+    
+    var submitLabel = document.getElementById('submit_label');
+
+    if (selectedOption === 'Event') {
+        aboutDateLabel.textContent = 'About Event:';
+        singleDoubleDateLabel.textContent = 'Single or Group Event:';
+        specificationsAboutDateLabel.textContent = 'Specifications about the Event:';
+        privacyLabel.textContent = 'Choose who you want to see your Event:';
+        maxParticipantsLabel.textContent ='Max Participants for Event:';
+        submitLabel.textContent = 'Create Group Event';
+    } else {
+        aboutDateLabel.textContent = 'About Date:';
+        singleDoubleDateLabel.textContent = 'Single or Group Date:';
+        specificationsAboutDateLabel.textContent = 'Specifications about the Date:';
+        privacyLabel.textContent = 'Choose who you want to see your Date:';
+        maxParticipantsLabel.textContent ='Max Participants for Date:'
+        submitLabel.textContent = 'Create Group Date';
+    }
+  });
+
+</script>
+{% endblock %}

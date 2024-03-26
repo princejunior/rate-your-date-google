@@ -91,35 +91,12 @@ Chat
     </div>
 </div>
 
-    <script>
-        function changeConversation(user) {
-            // Fetch messages for the selected user (you need to implement this)
-            // Update the chat container with the fetched messages
-            // For now, just updating the user ID input field
-            document.getElementById('userId').value = user;
-        }
-    </script>
-    {% comment %} <div class="sidebar">
-        <h2>Chats</h2>
-        <ul>
-            <li>User 1</li>
-            <li>User 2</li>
-            <li>User 3</li>
-            <!-- Add more users dynamically or fetch from database -->
-        </ul>
-    </div>
-    <div class="main-content">
-        <div class="chat-container">
-            <!-- Chat messages will be dynamically populated here -->
-            <div class="message other">Hello!</div>
-            <div class="message">Hi there!</div>
-        </div>
-        <div class="message-input">
-            <form action="{% url 'send_message' %}" method="post">
-                {% csrf_token %}
-                <input type="text" name="message" placeholder="Type your message" autocomplete="off">
-                <button type="submit">Send</button>
-            </form>
-        </div>
-    </div> {% endcomment %}
+<script>
+    function changeConversation(user) {
+        // Fetch messages for the selected user (you need to implement this)
+        // Update the chat container with the fetched messages
+        // For now, just updating the user ID input field
+        document.getElementById('userId').value = user;
+    }
+</script>
 {% endblock %}

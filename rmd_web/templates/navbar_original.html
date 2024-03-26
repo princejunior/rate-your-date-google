@@ -1,7 +1,8 @@
 {% load static %}
+<!-- This is the layout! -->
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html>
+  <head>
     <title>{% block title %}{% endblock %}</title>
     {% comment %} <title>Rate My Date 2.0</title> {% endcomment %}
     <meta charset="UTF-8" />
@@ -22,25 +23,26 @@
         font-family: "Open Sans", sans-serif;
       }
       .content {
-        margin-top: 50px; /* Add space above the footer */
-        margin-bottom: 120px; /* Adjusted margin-bottom */
-      }
-      .footer {
-        display: none; /* Initially hide the footer */
-        position: fixed; /* Fixed position */
-        left: 0;
-        bottom: 0;
-        width: 100%;
-        background-color: #f3f3f3;
-        color: #333;
-        text-align: center;
-        padding: 10px 0;
-        transition: opacity 0.5s; /* Add transition effect for smooth appearance */
-        margin-top: 100px; /* Add space above the footer */
-      }
+        margin-bottom: 80px; /* Adjust the value as needed */
+    }
+    .footer {
+      display: none; /* Initially hide the footer */
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      background-color: #f3f3f3;
+      color: #333;
+      text-align: center;
+      padding: 10px 0;
+      transition: opacity 0.5s; /* Add transition effect for smooth appearance */
+      margin-top: 100px; /* Add space above the footer */
+    }
+
     </style>
-</head>
-<body class="w3-theme-l5">
+  </head>
+
+  <body class="w3-theme-l5">
     <!-- Navbar -->
     <div class="w3-top">
       <div class="w3-bar w3-theme-d2 w3-left-align w3-large">
@@ -99,6 +101,7 @@
         <a href="../../accounts/signup/" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="signup_google">
           Sign Up
         </a>
+        {% endif %}
 
         <form method="GET" action="{% url 'search_results' %}" class="w3-bar-item">
           <input type="text" name="query" placeholder="Search by name">
@@ -119,54 +122,56 @@
       <a href="#" class="w3-bar-item w3-button w3-padding-large">My Profile</a>
     </div>
 
-    <div class="w3-container content">
-        {% block content %}
-        {% endblock %}
-    </div>
+
+    <!-- Page Container -->
+    {% block content %}
+
+    {% endblock %}
 
     <!-- Footer -->
-    <footer class="w3-container w3-theme-d5 footer" id="footer">
-        <p>@2024 Intelectual Property. All rights reserved.</p>
+
+    <footer class="w3-container w3-theme-d5 footer"  id="footer" >
+      <p>@2024 Intelectual Property. All rights reserved.</p>
     </footer>
 
     <script>
-        // Accordion
-        function myFunction(id) {
-            var x = document.getElementById(id);
-            if (x.className.indexOf("w3-show") == -1) {
-                x.className += " w3-show";
-                x.previousElementSibling.className += " w3-theme-d1";
-            } else {
-                x.className = x.className.replace("w3-show", "");
-                x.previousElementSibling.className =
-                x.previousElementSibling.className.replace(" w3-theme-d1", "");
-            }
+      // Accordion
+      function myFunction(id) {
+        var x = document.getElementById(id);
+        if (x.className.indexOf("w3-show") == -1) {
+          x.className += " w3-show";
+          x.previousElementSibling.className += " w3-theme-d1";
+        } else {
+          x.className = x.className.replace("w3-show", "");
+          x.previousElementSibling.className =
+            x.previousElementSibling.className.replace(" w3-theme-d1", "");
         }
+      }
 
-        // Used to toggle the menu on smaller screens when clicking on the menu button
-        function openNav() {
-            var x = document.getElementById("navDemo");
-            if (x.className.indexOf("w3-show") == -1) {
-                x.className += " w3-show";
-            } else {
-                x.className = x.className.replace(" w3-show", "");
-            }
+      // Used to toggle the menu on smaller screens when clicking on the menu button
+      function openNav() {
+        var x = document.getElementById("navDemo");
+        if (x.className.indexOf("w3-show") == -1) {
+          x.className += " w3-show";
+        } else {
+          x.className = x.className.replace(" w3-show", "");
         }
+      }
 
-        window.onscroll = function() {scrollFunction()};
+      window.onscroll = function() {scrollFunction()};
 
-        function scrollFunction() {
-            var footer = document.getElementById("footer");
-            // Calculate how far the user is from the bottom of the page
-            var distanceFromBottom = document.documentElement.scrollHeight - (window.innerHeight + window.scrollY);
-            // Show the footer when the user is close to the bottom (within 100px)
-            if (distanceFromBottom < 100) {
-                footer.style.display = "block";
-            } else {
-                footer.style.display = "none";
-            }
+    function scrollFunction() {
+        var footer = document.getElementById("footer");
+        // Calculate how far the user is from the bottom of the page
+        var distanceFromBottom = document.documentElement.scrollHeight - (window.innerHeight + window.scrollY);
+        // Show the footer when the user is close to the bottom (within 100px)
+        if (distanceFromBottom < 100) {
+            footer.style.display = "block";
+        } else {
+            footer.style.display = "none";
         }
+    }
     </script>
     <script src="https://kit.fontawesome.com/a2dc75d948.js" crossorigin="anonymous"></script>
-</body>
+  </body>
 </html>
