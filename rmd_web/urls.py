@@ -67,25 +67,25 @@ urlpatterns = [
 
 ######################################################################################################################
 # 
-path('upload/', views.upload_image, name='upload_image'),
+    path('upload/', views.upload_image, name='upload_image'),
 ######################################################################################################################
 
 ######################################################################################################################
 # POSTS
-path('add_comment/<post_id>/', views.add_comment, name='add_comment'),
-path('like_post/<post_id>/', views.like_post, name='like_post'),
-path('dislike_post/<post_id>/', views.dislike_post, name='dislike_post'),
+    path('add_comment/<post_id>/', views.add_comment, name='add_comment'),
+    path('like_post/<post_id>/', views.like_post, name='like_post'),
+    path('dislike_post/<post_id>/', views.dislike_post, name='dislike_post'),
 ######################################################################################################################
 
 ######################################################################################################################
 # MESSAGES
-path('message/', views.messages, name='messages'),
-
-path('send_message/', views.send_message, name='send_message'),
+    path('message/', views.messages, name='messages'),
+    path('send_message/', views.send_message, name='send_message'),
 ######################################################################################################################
 
 ######################################################################################################################
-# 
+# AUTH
+    path('signup/', views.signup, name='signup')
 
 ######################################################################################################################
 
