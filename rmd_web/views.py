@@ -128,33 +128,33 @@ def user_profile(request):
     if request.method == 'POST':
         print("Post button was clicked")
         
-            action = request.POST.get('action')
-            print('action', action)
-            if action == 'add_post':
-                print("add_post button was clicked")
-                target_user_id = user_id
-                post_content = request.POST.get('comment')
-                post_image_url = request.FILES.get('picture')
-                add_post(user_id, target_user_id, post_content,post_image_url)
-                return redirect('profile')
+        action = request.POST.get('action')
+        print('action', action)
+        if action == 'add_post':
+            print("add_post button was clicked")
+            target_user_id = user_id
+            post_content = request.POST.get('comment')
+            post_image_url = request.FILES.get('picture')
+            add_post(user_id, target_user_id, post_content,post_image_url)
+            return redirect('profile')
         
-            if action == 'like':
-                print("like_post button was clicked")
-                post_id = request.POST.get('post_id')
+        if action == 'like':
+            print("like_post button was clicked")
+            post_id = request.POST.get('post_id')
             
-                like_post(post_id, user_id) 
-                print("post ID", post_id)
-                # pass
-                return redirect('profile')
+            like_post(post_id, user_id) 
+            print("post ID", post_id)
+            # pass
+            return redirect('profile')
 
-            if action == 'dislike':
-                print("dislike_post button was clicked")
-                post_id = request.POST.get('post_id')
-                dislike_post(post_id,user_id)
-                return redirect('profile')
+        if action == 'dislike':
+            print("dislike_post button was clicked")
+            post_id = request.POST.get('post_id')
+            dislike_post(post_id,user_id)
+            return redirect('profile')
         
-            if action == 'comment':
-                print("comment button was clicked")
+        if action == 'comment':
+            print("comment button was clicked")
             
             # add_comment()
             return redirect('profile')
@@ -372,7 +372,6 @@ def send_friend_request_view(request):
 
 
 def search_results(request):
-<<<<<<< HEAD
     query = request.GET.get('query')
     if query:
         results = search_users(query)
@@ -456,36 +455,6 @@ def search_results(request):
 #     return JsonResponse({"success": True})
 
 ######################################################################################################################
-=======
-    # Get the query parameter 'query' from the URL
-    query_param = request.GET.get('query', '')
-    # Get the query parameter 'search' from the URL
-    search_param = request.GET.get('search', '')
-    # print("Search_results",query_param, search_param)
-    # Now you can use the query_param and search_param to fetch information
-    # You can process the query and search parameters as needed
-    search_result = search_profiles_single_term(query_param)
-    # print(search_result)
-    # For example, you can render a template with the query and search parameters
-    
-    
-    if request.method == 'POST':
-        sender_id = request.user.email
-        recipient_id = request.POST.get('recipient_id')
-        # print('sender_id', sender_id)
-        # print('recipient_id', recipient_id)
-        # Assume you have a Firestore collection named 'friend_requests'
-        send_friend_request(sender_id, recipient_id)
-        # messages.success(request, 'Friend request sent successfully.')
-        
-    context = {
-        'query': query_param, 
-        'search': search_param,
-        'search_results' :  search_result
-    }
-    return render(request, 'pages/search_results.html', context)
-######################################################################################################################
->>>>>>> 3bcd1ee (cleaning up the clutter)
    
 ######################################################################################################################
 # MESSAGES
