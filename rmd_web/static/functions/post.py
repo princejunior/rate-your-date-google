@@ -87,7 +87,6 @@ def add_post(user_id, target_user_id, post_content, post_image_url=None):
     print("Post added successfully")
     print("Out of add_post")
     
-
 # Function to add a comment to a post
 def add_comment(post_id, user_id, target_user_id, comment_content):
     # Reference the post document
