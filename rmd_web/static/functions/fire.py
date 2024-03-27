@@ -163,7 +163,6 @@ def participated_group_date():
         'details': {
             'title': group_date_data['title'], 
             'image': group_date_data['image'],
-            'image': group_date_data['image'], 
             'about_date': group_date_data['about_date'],  
             'type': group_date_data['type'],
             'specifications': group_date_data['specifications'],
