@@ -151,8 +151,8 @@ def create_group_date(group_date_data):
     })
     return doc_ref.id
 
-def participated_group_date():
-    group_date_data = []
+def participated_group_date(group_date_data):
+    # group_date_data = []
     #profile ids
     participants = [] 
     participants.append(group_date_data)
