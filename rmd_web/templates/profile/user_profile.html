@@ -95,8 +95,6 @@ Profile
         }
     </style>
     <div class="profile-container"> <!-- New container div -->
-
-    <div class="w3-container profile-container">
         <div class="profile-info">
             <div class="profile-info-left">
                 <h1>{{user_information.first_name}} {{user_information.last_name}}</h1>
@@ -109,7 +107,6 @@ Profile
                 <img src="{{user_information.profile_picture}}" alt="Profile Picture">
             </div>
         </div>
-
         <div class="profile-buttons">
             <button>Create Post</button>
             <button><a href="{% url 'create_event' %}">Create Event</a></button>
@@ -117,7 +114,7 @@ Profile
             <button><i class="fas fa-user-edit edit-profile-icon"></i></button>
         </div>
     </div>
-
+{% comment %} 
     <div class="w3-col m7">
         <div class="w3-row-padding">
             <div class="w3-col m12">
@@ -144,11 +141,10 @@ Profile
                 <button class="w3-bar-item w3-button" onclick="openTab('events')">Events</button>
                 <button class="w3-bar-item w3-button" onclick="openTab('dates')">Dates</button>
             </div>
-
             <!-- Content Tab -->
             <div id="posts" class="w3-container tab active">
                 <h2>Posts</h2>
-                <!-- Place your content
+                <!-- Place your content -->
                 <!-- here -->
                 {% if profile_posts %}
                     {% for post in profile_posts %}
@@ -224,9 +220,7 @@ Profile
                 {{ profile_dates }}
             </div>
         </div>
-    </div>
-</div>
-</div> <!-- Closing main-content-container div -->
+    </div> {% endcomment %}
 
 <script>
     // JavaScript function to open the selected tab
