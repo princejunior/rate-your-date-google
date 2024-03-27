@@ -47,7 +47,7 @@ urlpatterns = [
 
 ######################################################################################################################
 # MESSAGES
-    path('message/', views.messages, name='messages'),
+    path('message/', views.message, name='messages'),
     path('send_message/', views.send_message, name='send_message'),
 ######################################################################################################################
 

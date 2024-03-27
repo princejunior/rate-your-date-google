@@ -29,9 +29,9 @@ def home(request):
         print(request.user.is_authenticated)
         user_id = request.user.email
         user_information = get_user_profile(user_id)
-        friend_requests = user_information.get('friend_requests', [])
+        # friend_requests = user_information.get('friend_requests', [])
         # print(friend_requests)
-        friends = user_information.get('friends', [])  # Retrieve the 'friends' list or an empty list if not present
+        # friends = user_information.get('friends', [])  # Retrieve the 'friends' list or an empty list if not present
         # print(friends)
         # friend_requests = get_user_friend_request(user_information)
         # all_friends_posts = get_friends_posts(friends)
@@ -99,9 +99,9 @@ def home(request):
     
         context = {
             'user_information': user_information,
-            'friends':friends,
+            # 'friends':friends,
             'friend_posts': all_friends_posts, 
-            'friend_requests': friend_requests
+            # 'friend_requests': friend_requests
         }
 
         return render(request, 'home.html', context)
@@ -428,7 +428,7 @@ def search_results(request):
 ######################################################################################################################
 # MESSAGES
 
-def messages(request):
+def message(request):
     messages = get_messages()
     return render(request, 'pages/messages.html', {'messages': messages})
 

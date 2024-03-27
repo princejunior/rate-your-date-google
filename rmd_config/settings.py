@@ -15,7 +15,7 @@ import os
 import firebase_admin
 from firebase_admin import credentials
 
-# Load environment variables from .env file
+# # Load environment variables from .env file
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -182,7 +182,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 ACCOUNT_AUTHENTICATION_METHOD = 'EMAIL'
 ACCOUNT_EMAIL_REQUIRED = True
 SITE_ID = 2
-SIGNUO_REDIRECT_URL = 'edit_profile/'
+SIGNUP_REDIRECT_URL = 'edit_profile/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = 'signup/'
 ######################################################################################################################
