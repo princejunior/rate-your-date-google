@@ -11,8 +11,6 @@ db = firestore.client()
 
 def get_user_profile(user_id):
     doc_ref = db.collection('profiles').document(user_id)
-def get_user_profile(email):
-    doc_ref = db.collection('profiles').document(email)
     doc = doc_ref.get()
     if doc.exists:
         # print(doc.to_dict())
@@ -39,13 +37,10 @@ def edit_user_profile(user_id, updated_data):
     doc_ref = db.collection('profiles').document(user_id)
     doc_ref.update(updated_data)
 
-<<<<<<< HEAD
 def fetch_profile(profile_id):
     profile_ref = db.collection('profiles').document(profile_id)
     profile_data = profile_ref.get().to_dict()
     return profile_data
-=======
->>>>>>> 3bcd1ee (cleaning up the clutter)
 ######################################################################################################################
 
 ######################################################################################################################
@@ -188,54 +183,6 @@ def get_group_date(group_date_id):
     else:
         print(f"No group date found with ID: {group_date_id}")
         return None
-
-<<<<<<< HEAD
-# # Example usage:
-# group_date_data = {
-#     'creator_id': 'example_creator_id',
-#     'details': {
-#         'date': '2024-03-20',
-#         'time': '15:00',
-#         'location': 'Central Park',
-#         'interests': ['Hiking', 'Picnic']
-#     },
-#     'maxParticipants': 10,
-#     'participants': ['user1_id', 'user2_id'],
-#     'privacy': 'public',
-#     'status': 'planned'
-# }
-# # Example usage:
-# group_date_data = {
-#     'creator_id': 'example_creator_id',
-#     'details': {
-#         'date': '2024-03-20',
-#         'time': '15:00',
-#         'location': 'Central Park',
-#         'interests': ['Hiking', 'Picnic']
-#     },
-#     'maxParticipants': 10,
-#     'participants': ['user1_id', 'user2_id'],
-#     'privacy': 'public',
-#     'status': 'planned'
-# }
-
-# group_date_id = add_group_date(group_date_data)
-# print("Group date added with ID:", group_date_id)
-# group_date_id = add_group_date(group_date_data)
-# print("Group date added with ID:", group_date_id)
-# group_date_id = add_group_date(group_date_data)
-# print("Group date added with ID:", group_date_id)
-# group_date_id = add_group_date(group_date_data)
-# print("Group date added with ID:", group_date_id)
-# group_date_id = add_group_date(group_date_data)
-# print("Group date added with ID:", group_date_id)
-
-# retrieved_group_date = get_group_date(group_date_id)
-# if retrieved_group_date:
-#     print("Retrieved Group Date:")
-#     print(retrieved_group_date)
-=======
->>>>>>> 3bcd1ee (cleaning up the clutter)
 ######################################################################################################################
 
 ######################################################################################################################
