@@ -6,20 +6,25 @@ from django.contrib import messages
 
 ######################################################################################################################
 # STATIC.FUNCTIONS
-from .static.functions.fire import get_user_profile, create_user_profile, edit_user_profile
-from .static.functions.fire import get_user_post, get_friends_posts, fetch_profile, get_user_events, add_post, add_comment, like_post,dislike_post 
-from .static.functions.fire import image_upload, get_messages, send_messages, search_profiles, search_profiles_single_term
-from .static.functions.fire import get_user_friend_request, send_friend_request, accept_friend_request, decline_friend_request
-from .static.functions.fire import create_group_date
+# from .static.functions.fire import get_user_profile, create_user_profile, edit_user_profile
+# from .static.functions.fire import get_user_post, get_friends_posts, fetch_profile, get_user_events, add_post, add_comment, like_post,dislike_post 
+# from .static.functions.fire import image_upload, get_messages, send_messages, search_profiles, search_profiles_single_term
+# from .static.functions.fire import get_user_friend_request, send_friend_request, accept_friend_request, decline_friend_request
+# from .static.functions.fire import create_group_date
 
-from .static.functions.search import search_users
-# from .static.functions.ads import
-# from .static.functions.friend_request import
-# from .static.functions.group_events import
-# from .static.functions.messages import
-# from .static.functions.friend_request import
-# from .static.functions.post import
+from .static.functions.profile import get_user_profile, create_user_profile, edit_user_profile, fetch_profile
 
+from .static.functions.search import search_profiles_single_term,search_profiles
+from .static.functions.date_reviews import add_date_review, get_date_review
+from .static.functions.events_dates import create_group_date, participated_group_date, get_group_date, update_group_date,delete_group_date
+from .static.functions.events_dates import get_user_events
+
+from .static.functions.feedback import add_feedback, get_feedback
+from .static.functions.friend_request import send_friend_request, accept_friend_request, decline_friend_request, get_user_friend_request
+from .static.functions.matches import add_match, get_match
+from .static.functions.messages import get_messages, send_messages
+from .static.functions.post import get_user_post, get_friends_posts, add_post,like_post,dislike_post, add_comment
+from .static.functions.image_upload import image_upload
 
 ######################################################################################################################
 # HOME
