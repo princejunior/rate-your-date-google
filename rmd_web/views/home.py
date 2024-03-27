@@ -6,6 +6,7 @@ from django.contrib import messages
 
 ######################################################################################################################
 # STATIC.FUNCTIONS
+from ..static.functions.user_data import UserData
 from ..static.functions.profile import get_user_profile, create_user_profile, edit_user_profile, fetch_profile
 from ..static.functions.search import search_profiles_single_term,search_profiles
 from ..static.functions.friend_request import send_friend_request, accept_friend_request, decline_friend_request, get_user_friend_request
@@ -13,18 +14,38 @@ from ..static.functions.post import get_user_post, get_friends_posts, add_post,l
 ######################################################################################################################
 # HOME
 def home(request):
+    # Create an instance of UserData
+    
     # print(request.user.uid)
     if request.user.is_authenticated:
-        print(request.user.is_authenticated)
         user_id = request.user.email
-        user_information = get_user_profile(user_id)
-        friend_requests = user_information.get('friend_requests', [])
-        # print(friend_requests)
-        friends = user_information.get('friends', [])  # Retrieve the 'friends' list or an empty list if not present
-        # print(friends)
-        # friend_requests = get_user_friend_request(user_information)
-        # all_friends_posts = get_friends_posts(friends)
-        all_friends_posts = get_friends_posts('elliott.t.elijah@gmail.com')
+        
+        current_user_data = UserData()
+        if current_user_data.is_empty():
+            user_information = get_user_profile(user_id)
+            current_user_data = UserData(**user_information)
+            request.session['user_data'] = current_user_data.to_dict()  # Convert UserData to a dictionary
+            
+            friend_requests = current_user_data.get_friend_requests()
+            friends = current_user_data.get_friends()  # Retrieve the 'friends' list or an empty list if not present
+            all_friends_posts = get_friends_posts(friends)
+        else:
+            print(current_user_data)
+            # Handle the case when current_user_data is not empty
+            pass  # You can add your logic here  
+        
+        # print(request.user.is_authenticated)
+        
+        # user_information = get_user_profile(user_id)
+        # print(user_information)
+        
+        # friend_requests = user_information.get('friend_requests', [])
+        # # print(friend_requests)
+        # friends = user_information.get('friends', [])  # Retrieve the 'friends' list or an empty list if not present
+        # # print(friends)
+        # # friend_requests = get_user_friend_request(user_information)
+        # # all_friends_posts = get_friends_posts(friends)
+        # all_friends_posts = get_friends_posts('elliott.t.elijah@gmail.com')
     
         if request.method == 'POST':
             print("Post button was clicked")
@@ -87,7 +108,7 @@ def home(request):
                 result = decline_friend_request(sender_email, recipient_email)
     
         context = {
-            'user_information': user_information,
+            'user_information': current_user_data,
             'friends':friends,
             'friend_posts': all_friends_posts, 
             'friend_requests': friend_requests

@@ -6,9 +6,10 @@ from django.contrib import messages
 
 ######################################################################################################################
 # STATIC.FUNCTIONS
+from ..static.functions.user_data import UserData
+
 
 from ..static.functions.profile import get_user_profile, create_user_profile, edit_user_profile, fetch_profile
-
 from ..static.functions.events_dates import create_group_date, participated_group_date, get_group_date, update_group_date,delete_group_date
 from ..static.functions.events_dates import get_user_events
 from ..static.functions.friend_request import send_friend_request, accept_friend_request, decline_friend_request, get_user_friend_request
@@ -20,8 +21,33 @@ from ..static.functions.image_upload import image_upload
 def user_profile(request):
     user_id = request.user.email
     profile_posts = get_user_post(request.user.email)
- 
+   
+    if 'user_data' in request.session:
+        # Session contains user data
+        user_data = request.session['user_data']
+        # Proceed with your logic
+        user_data = UserData(**user_data)  # Reconstruct UserData from the dictionary
+    else:
+        # Session is empty or does not contain user data
+        user_information = get_user_profile(user_id)
+        current_user_data = UserData(**user_information)
+        request.session['user_data'] = current_user_data.to_dict()  # Convert UserData to a dictionary
+        
+        
+    
+    # if current_user_data.is_empty():
+    #     user_information = get_user_profile(user_id)
+    #     current_user_data = UserData(**user_information)
+    #     friend_requests = current_user_data.get_friend_requests()
+    #     friends = current_user_data.get_friends()  # Retrieve the 'friends' list or an empty list if not present
+    #     all_friends_posts = get_friends_posts(friends)
+    # else:
+    #     print(current_user_data)
+    #     # Handle the case when current_user_data is not empty
+    #     pass  # You can add your logic here  
+        
     user_information = get_user_profile(user_id)
+    
     # profile_events = get_user_events(user_information['events'])
     events, dates = get_user_events(user_information['events'])
     if request.method == 'POST':
@@ -85,7 +111,8 @@ def user_profile(request):
             
             return redirect('profile')
     context = {
-       'user_information': user_information,
+    #    'user_information': user_information,
+       'user_information': request.session['user_data'],
        'profile_posts': profile_posts,
        'profile_events': events,
        'profile_dates': dates,
