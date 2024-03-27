@@ -182,7 +182,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 ACCOUNT_AUTHENTICATION_METHOD = 'EMAIL'
 ACCOUNT_EMAIL_REQUIRED = True
 SITE_ID = 2
-LOGIN_REDIRECT_URL = 'edit_profile/'
+SIGNUO_REDIRECT_URL = 'edit_profile/'
+LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = 'signup/'
 ######################################################################################################################
 

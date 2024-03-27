@@ -190,11 +190,9 @@ def user_profile(request):
        'profile_posts': profile_posts,
        'profile_events': events,
        'profile_dates': dates,
-       
     }
     # print(context)
     return render(request, 'profile/user_profile.html', context)
-
 
 def profile(request):
     user_id = request.user.email
@@ -350,14 +348,36 @@ def edit_user(request):
 #     # Pass the profile object to the template for rendering
 #     return render(request, 'view_profile.html', {'profile': profile})
 
-def profile_view(request, profile_id):
+def profile_view(request, email):
     # Fetch profile data from Firestore
+    profile_id = email
     profile_data = fetch_profile(profile_id)
-
+    profile_posts = get_user_post(profile_id)
+ 
+    user_information = get_user_profile(profile_id)
+    # profile_events = get_user_events(user_information['events'])
+    events, dates = get_user_events(user_information['events'])
     if not profile_data:
         return HttpResponse("Profile not found", status=404)
+    
+    if request.method == 'POST':
+        print("Post button was clicked")
+        action = request.POST.get('action')
+        print('action', action)
+        if action == 'friend_request':
+            sender_id = request.user.email
+            recipient_id = profile_id
+            send_friend_request(sender_id, recipient_id)
+            return redirect('profile')
+    # print(profile_data)
+    context = {
+       'profile_data': profile_data, 
+       'profile_posts': profile_posts,
+       'profile_events': events,
+       'profile_dates': dates, 
+    }
 
-    return render(request, 'profile.html', {'profile': profile_data})
+    return render(request, 'profile/view_profile.html', context)
 ######################################################################################################################
 
 ######################################################################################################################

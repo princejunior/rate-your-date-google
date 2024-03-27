@@ -22,7 +22,9 @@ Search Results
                 <input type="hidden" name="recipient_id" value="{{ profile_data.email }}">
                 <button type="submit">Send Friend Request</button>
             </form>       
-            <a href="{% url 'profile_view' profile_data.first_name %}">View Profile</a>
+            {% comment %} <a href="{% url 'profile_view' profile_data.first_name %}">View Profile</a> {% endcomment %}
+            <a href="{% url 'profile_view' email=profile_data.email %}">View Profile</a>
+
         </div> 
     {% endfor %}
 {% endblock %}

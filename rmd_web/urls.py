@@ -14,8 +14,8 @@ urlpatterns = [
     path('edit_profile/', views.edit_user, name="edit_profile"),
     # path('view_profile/', views.get_individuals_profile, name="view_profile"),
     # path('view_profile/<int:profile_id>/', views.view_profile, name='view_profile'),
-    path('profile/<str:profile_id>/', views.profile_view, name='profile_view'),
-    # path('profile/<str:email>/', views.profile_view, name='profile_view'),
+    # path('profile/<str:profile_id>/', views.profile_view, name='profile_view'),
+    path('profile/<str:email>/', views.profile_view, name='profile_view'),
 ######################################################################################################################
 
 ######################################################################################################################

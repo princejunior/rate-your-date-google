@@ -40,6 +40,7 @@ def edit_user_profile(user_id, updated_data):
 def fetch_profile(profile_id):
     profile_ref = db.collection('profiles').document(profile_id)
     profile_data = profile_ref.get().to_dict()
+    # print(profile_data)
     return profile_data
 ######################################################################################################################
 
@@ -1049,50 +1050,17 @@ def send_messages(user_id, message):
 ######################################################################################################################
 # SEARCH
 def search_profiles_single_term(term):
-    # Searches for profiles based on a single search term.
-
-    # Args:
-    #     term (str): The search term (e.g., "John" or "example@email.com").
-
-    # Returns:
-    #     list: List of profile documents matching the search term.
-    
-    # print("term:", term)
     profiles_ref = db.collection("profiles")
-
-     # Construct the query dynamically for all specified fields
-    # for field in ["first_name", "last_name", "email"]:
-    #     filter = FieldFilter(field, "==", term)
-    #     profiles_ref = profiles_ref.where(filter=filter)
     id_ref = profiles_ref.where(filter=FieldFilter("id", "==", term))
     first_name_ref = profiles_ref.where(filter=FieldFilter("first_name", "==", term))
     last_name_ref = profiles_ref.where(filter=FieldFilter("last_name", "==", term))
     email_ref = profiles_ref.where(filter=FieldFilter("email", "==", term))
     
-    
-    
-    # profiles_ref = profiles_ref.where("first_name", "==", "e")
-
-    # Execute the query
-    # results = profiles_ref.stream()
-    # profiles = []
-    # for profile in results:
-    #     profiles.append(profile.to_dict())
     id_results = id_ref.stream()
     first_name_results = first_name_ref.stream()
     last_name_results = last_name_ref.stream()
     email_results = email_ref.stream()
-    
-    # profiles = []
-    # for profile in id_results:
-    #     profiles.append(profile.to_dict())
-    # for profile in first_name_results:
-    #     profiles.append(profile.to_dict())
-    # for profile in last_name_results:
-    #     profiles.append(profile.to_dict())
-    # for profile in email_results:
-    #     profiles.append(profile.to_dict())
-    
+
     profiles = []
 
     # Add profiles from id_results
@@ -1128,14 +1096,6 @@ def search_profiles_single_term(term):
 
 def search_profiles(query):
    
-    # Searches for profiles based on the provided query.
-
-    # Args:
-    #     query (dict): A dictionary containing search parameters (e.g., {"first_name": "John"}).
-
-    # Returns:
-    #     list: List of profile documents matching the query.
- 
     profiles_ref = db.collection("profiles")
 
     # Construct the query dynamically based on the provided parameters
@@ -1159,16 +1119,30 @@ def search_profiles(query):
 def send_friend_request(sender_id, recipient_id ):
     # Specify the document reference
     print('inside send_friend_request', recipient_id)
-    friend_requests_ref = db.collection('profiles').document(recipient_id)
+    
+    # Get a reference to the "friend_requests" collection and generate a new document ID
+    friend_requests_ref = db.collection('friend_requests').document()
 
-# Update the array field
-    friend_requests_ref.update({
-        'friend_requests': firestore.ArrayUnion([{
-            'sender_id': sender_id,
-            'recipient_id': recipient_id,
-            'status': 'pending'
-        }])
+    # Set the data for the friend request
+    friend_requests_ref.set({
+        'sender_id': sender_id,
+        'recipient_id': recipient_id,
+        'status': 'pending'
     })
+    friend_request_id = friend_requests_ref.id
+    
+    sender_friend_requests_ref = db.collection('profiles').document(sender_id)
+    sender_friend_requests_ref.update({
+        'sent_friend_requests': firestore.ArrayUnion([friend_request_id])
+    })
+    
+    recipient_profile_ref = db.collection('profiles').document(recipient_id)
+    # Update the friend_requests field by appending the new friend request document ID
+    recipient_profile_ref.update({
+        'friend_requests': firestore.ArrayUnion([friend_request_id])
+    })
+
+
 
 def accept_friend_request(sender_email, recipient_email):
     # Reference to the sender's profile document
@@ -1219,15 +1193,12 @@ def accept_friend_request(sender_email, recipient_email):
 
     return "Friend request accepted successfully"
  
-def decline_friend_request(sender_email, recipient_email):
-    # Initialize Firestore client
-    db = firestore.Client()
-
+def decline_friend_request(sender_id, recipient_id):
     # Reference to the sender's profile document
-    sender_ref = db.collection('profiles').document(sender_email)
+    sender_ref = db.collection('profiles').document(sender_id)
 
     # Reference to the recipient's profile document
-    recipient_ref = db.collection('profiles').document(recipient_email)
+    recipient_ref = db.collection('profiles').document(recipient_id)
 
     # Retrieve the sender's profile document
     sender_profile = sender_ref.get()
