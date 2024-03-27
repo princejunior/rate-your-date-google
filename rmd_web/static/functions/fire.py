@@ -456,8 +456,6 @@ def send_friend_request(sender_id, recipient_id ):
         'friend_requests': firestore.ArrayUnion([friend_request_id])
     })
 
-
-
 def accept_friend_request(sender_email, recipient_email):
     # Reference to the sender's profile document
     sender_ref = db.collection('profiles').document(sender_email)
