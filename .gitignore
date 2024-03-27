@@ -1,5 +1,4 @@
 fire/rate-my-date-fca52-cf894cb26c1d.json
-<<<<<<< HEAD
 __pycache__/
 rmd_web/__pycache__
 rmd_web/__pycache__
@@ -11,7 +10,5 @@ rmd_config/__pycache__
 
 rmd_web/static/functions/__pycache__
 rmd_config/__pycache__
-=======
 venv
->>>>>>> cfc0bba (added requirements.txt)
 env

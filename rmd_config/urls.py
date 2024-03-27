@@ -30,6 +30,8 @@ urlpatterns = [
     path('logout', LogoutView.as_view()), 
     path('accounts/', include('allauth.urls')),
     path('accounts/profile/', views.user_profile, name="profile"),
+    path('accounts/edit_profile/', views.edit_user_profile, name="edit_user_profile"),
+    
     # path('accounts/profile/', views.profile, name="profile"),
     
     # path('accounts/google/login/?process=login', include('allauth.urls')),
