@@ -6,66 +6,66 @@ Profile
 
 
 {% block content %}
-<style>
-    .profile-container {
-      max-width: 1200px;
-      margin: auto;
-      margin-top: 25px; 
-      padding: 20px;
-      background: #D9D9D9;
-      border-radius: 10px;
-    }
+<style> 
+  .profile-container {
+    max-width: 1200px;
+    margin: auto;
+    margin-top: 25px; 
+    padding: 20px;
+    background: #D9D9D9;
+    border-radius: 10px;
+  }
     .profile-info {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
     }
     .profile-info-left {
-      flex: 1;
+        flex: 1;
     }
     .profile-info-left h1, .profile-info-left h3 {
-      margin: 5px 0;
+        margin: 5px 0;
     }
     .profile-info-right img {
-      width: 200px;
-      height: auto;
-      border-radius: 50%;
-      border: 10px solid #fff;
+        width: 200px;
+        height: auto;
+        border-radius: 50%;
+        border: 10px solid #fff;
     }
     .profile-buttons {
         text-align: center;
-        margin-top: 20px;
-      }
-      .profile-buttons button {
-        margin: 0 10px;
+        margin-top: 10px;
+    }
+    .profile-buttons button {
+        margin: 10px   10px;
         padding: 10px 20px;
         background: #00477A;
         color: #fff;
         border: none;
         border-radius: 5px;
         cursor: pointer;
-      }
-      .profile-buttons .edit-profile-icon {
+    }
+    .profile-buttons .edit-profile-icon {
         font-size: 20px;
-      }
-      .profile-buttons a {
+    }
+    .profile-buttons a {
         text-decoration: none; /* Remove underline */
         color: inherit; /* Inherit color from parent button */
-      }
+    }
     .friend-list-container {
-      text-align: center;
-      margin-top: 20px;
-      padding: 20px;
-      background: #D9D9D9;
-      border-radius: 10px;
+        text-align: center;
+        margin-top: 20px;
+        padding: 20px;
+        background: #D9D9D9;
+        border-radius: 10px;
     }
     .friend-list-container img {
-      width: 50px;
-      height: auto;
-      border-radius: 50%;
-      border: 5px solid #fff;
-      margin: 0 10px;
+        width: 50px;
+        height: auto;
+        border-radius: 50%;
+        border: 5px solid #fff;
+        margin: 0 10px;
     }
     .display-center-content {
         display: flex;
@@ -85,78 +85,232 @@ Profile
         margin: 0 auto; /* Center align the container */
         width: 80%; /* Set a width for the container */
     }
-
+    /* Custom Styles */
     .tab {
         display: none;
     }
     .tab.active {
         display: block;
     }
+
+    /* Card container */
+  .card {
+    width: 300px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px;
+  }
+
+  /* Card title */
+  .card-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  /* Card details */
+  .card-details {
+    font-size: 16px;
+  }
+
+  /* Card image */
+  .card-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
 </style>
 
-
-<div class="w3-container profile-container">
+<div class="profile-container">
   <div class="profile-info">
     <div class="profile-info-left">
-      <h1>{{user_information.first_name}} {{user_information.last_name}}</h1>
+      <h1>{{profile_data.first_name}} {{profile_data.last_name}}</h1>
       <h3>Software Engineering Student | BYU - Idaho</h3>
-      <p>{{user_information.profession_background}}</p>
+      <p>{{profile_data.profession_background}}</p>
       <p>Friendly and Energetic!</p>
       <p>Rexburg, Idaho, United States</p>
     </div>
     <div class="profile-info-right">
-      <img src="{{user_information.profile_picture}}" alt="Profile Picture">
+      <img src="{{profile_data.profile_picture}}" alt="Profile Picture">
     </div>
   </div>
-
   <div class="profile-buttons">
-    <button>
-        <a href="{% url 'create_event' %}">Create Event</a>
-    </button>
-    <button>Post Event</button>
-    <button>View Friends</button>
-    <button><i class="fas fa-user-edit edit-profile-icon"></i></button>
-
-  </div>
+    <form method="post" action="{% url 'send_friend_request' %}">
+        {% csrf_token %}
+        <!-- Add any additional fields you need for the friend request -->
+        <input type="hidden" name="recipient_id" value="{{ profile_data.email }}">
+        <input type="hidden" name="action" value="friend_request">
+        <button type="submit" class="w3-button w3-theme">
+            <i class="fa fa-user-plus"></i> Send Friend Request
+        </button>
+    </form>
+    
+    <button class="w3-button w3-theme">View Friends</button>
 </div>
 
-<div class="display-center-content">
+</div>
+
+<div class="w3-content w3-padding-large w3-margin-top" id="portfolio">
+  <div class="w3-col m7">
+    <div class="w3-row-padding">
+      <div class="w3-col m12">
+        <div class="w3-card w3-round w3-white">
+          <div class="w3-container w3-padding">
+              <h6 class="w3-opacity">Create a new Post</h6>
+              <form method="post" enctype="multipart/form-data" name="add_post" id="add_post_form">
+                {% csrf_token %}
+                <textarea id="comment" name="comment" rows="4" cols="50" class="w3-border w3-padding" placeholder="Write something..."></textarea>
+                <label for="picture">Picture:</label>
+                <input type="file" id="picture" name="picture"><br>
+                <input type="hidden" name="action" value="add_post">
+                <button type="submit" class="w3-button w3-theme">
+                  <i class="fa fa-pencil"></i>  Post
+                </button>
+              </form>
+              </div>
+          </div>
+      </div>
+    </div>
     <div class="display-w3-bar">
-        <button class="w3-bar-item w3-button" onclick="openTab('posts')">Posts</button>
-        <button class="w3-bar-item w3-button" onclick="openTab('events')">Events</button>
-        <button class="w3-bar-item w3-button" onclick="openTab('dates')">Dates</button>
+      <button class="w3-bar-item w3-button" onclick="openTab('posts')">Posts</button>
+      <button class="w3-bar-item w3-button" onclick="openTab('events')">Events</button>
+      <button class="w3-bar-item w3-button" onclick="openTab('dates')">Dates</button>
     </div>
+      <!-- Content Tab -->
+      <div id="posts" class="w3-container tab active">
+          <h2>Posts</h2>
+          <!-- Place your content -->
+          <!-- here -->
+          {% if profile_posts %}
+              {% for post in profile_posts %}
+                  <div class="w3-container w3-card w3-white w3-round w3-margin">
+                      <br />
+                      <img src="/w3images/avatar2.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width: 60px"/>
+                      <span class="w3-right w3-opacity">1 min</span>
+                      <h4>John Doe</h4>
+                      <br />
+                      <hr class="w3-clear" />
+                      <p>{{ post.post_content }}</p>
+                      {% if post.post_image_url %}
+                          <div class="w3-row-padding" style="margin: 0 -16px">
+                              <div class="w3-half">
+                                  <img
+                                      src="{{ post.post_image_url }}"
+                                      style="width: 100%"
+                                      alt="Post Image"
+                                      class="w3-margin-bottom"
+                                  />
+                              </div>
+                          </div>
+                      {% endif %}
+                      <div class="w3-row-padding" style="margin: 0 -16px">
+                          <form action="{% url 'profile' %}" method="post">
+                              {% csrf_token %}
+                              <input type="hidden" name="action" value="like">
+                              <input type="hidden" name="post_id" value="{{ post.id }}">
+                              <button type="submit" class="w3-button w3-theme-d1 w3-margin-bottom">
+                                  <i class="fa fa-thumbs-up"></i> Agree
+                              </button>
+                          </form>
+                          <form action="{% url 'profile' %}" method="post">
+                              {% csrf_token %}
+                              <input type="hidden" name="action" value="dislike">
+                              <input type="hidden" name="post_id" value="{{ post.id }}">
+                              <button type="submit" class="w3-button w3-theme-d1 w3-margin-bottom">
+                                  <i class="fa fa-thumbs-down"></i> Disagree
+                              </button>
+                          </form>
+                          <form action="{% url 'profile' %}" method="post">
+                              {% csrf_token %}
+                              <input type="hidden" name="action" value="comment">
+                              <input type="hidden" name="post_id" value="{{ post.id }}">
+                              <button type="submit" class="w3-button w3-theme-d2 w3-margin-bottom">
+                                  <i class="fa fa-comment"></i> Comment
+                              </button>
+                          </form>
+                      </div>
+                  </div>
+              {% endfor %}
+          {% else %}
+              <p>No posts found</p>
+          {% endif %}
+      </div>
 
-    <!-- Content Tab -->
-    <div id="posts" class="w3-container tab active">
-        <h2>Posts</h2>
-        <!-- Place your content here -->
-    </div>
+      <!-- Saved Tab -->
+      <div id="events" class="w3-container tab">
+          <h2>Events</h2>
+          {% if profile_events %}
+              {% for event in profile_events %}
+                  <!-- Place your saved content here -->
+                  <div class="card">
+                      <img src="{{event.details.image}}" alt="Event Image" class="card-image">
+                      <h2 class="card-title">{{event.title}}</h2>
+                      <div class="card-details">
+                          <p><strong>Type:</strong> {{event.type_date_event}}</p>
+                          {% comment %} <p><strong>Privacy:</strong> {{event.privacy}}</p> {% endcomment %}
+                          <p><strong>Max Participants:</strong> {{event.participants}}</p>
+                          <p><strong>About Date:</strong> {{event.details.about_date}}</p>
+                          <p><strong>Specifications:</strong> {{event.maxParticipants}} </p>
+                          <p><strong>Start Date:</strong> {{event.details.start_date}}</p>
+                          <p><strong>Start Time:</strong> {{event.details.start_time}}</p>
+                          <p><strong>End Date:</strong> {{event.details.end_date}}</p>
+                          <p><strong>End Time:</strong> {{event.details.end_time}}</p>
+                          <p><strong>Creator ID:</strong> {{event.creator_id}}</p>
+                      </div>
+                  </div>
+              {% endfor %}
+          {% else %}
+              <p> No Events found</p>
+          {% endif %}
+          {% comment %} {{ profile_events }} {% endcomment %}
+      </div>
 
-    <!-- Saved Tab -->
-    <div id="events" class="w3-container tab">
-        <h2>Events</h2>
-        <!-- Place your saved content here -->
-    </div>
+      <!-- Tagged Tab -->
+      <div id="dates" class="w3-container tab">
+          <h2>Dates</h2>
+          {% if profile_dates %}
+              {% for date in profile_dates %}
+                  <!-- Place your saved content here -->
+                  <div class="card">
+                      <img src="{{date.details.image}}" alt="Event Image" class="card-image">
+                      <h2 class="card-title">{{date.title}}</h2>
+                      <div class="card-details">
+                          <p><strong>Type:</strong> {{date.type_date_event}}</p>
+                          {% comment %} <p><strong>Privacy:</strong> {{event.privacy}}</p> {% endcomment %}
+                          <p><strong>Max Participants:</strong> {{date.participants}}</p>
+                          <p><strong>About Date:</strong> {{date.details.about_date}}</p>
+                          <p><strong>Specifications:</strong> {{date.maxParticipants}} </p>
+                          <p><strong>Start Date:</strong> {{date.details.start_date}}</p>
+                          <p><strong>Start Time:</strong> {{date.details.start_time}}</p>
+                          <p><strong>End Date:</strong> {{date.details.end_date}}</p>
+                          <p><strong>End Time:</strong> {{date.details.end_time}}</p>
+                          <p><strong>Creator ID:</strong> {{date.creator_id}}</p>
+                      </div>
+                  </div>
+              {% endfor %}
 
-    <!-- Tagged Tab -->
-    <div id="dates" class="w3-container tab">
-        <h2>Dates</h2>
-        <!-- Place your tagged content here -->
-    </div>
-</div>
+          {% else %}
+              <p> No Events found</p>
+          {% endif %}
+            {% comment %} {{ profile_dates }} {% endcomment %}
+      </div>
+  </div>
+</div> 
 
-  <script>
-    // JavaScript function to open the selected tab
-    function openTab(tabName) {
+<script>
+  // JavaScript function to open the selected tab
+  function openTab(tabName) {
       // Get all elements with class="tab" and hide them
-      const tabs = document.querySelectorAll('.tab');
-      tabs.forEach(tab => {
-        tab.classList.remove('active');
-      });
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(tab => {
+      tab.classList.remove('active');
+    });
   
-      // Show the current tab, and add an "active" class to the button that opened the tab
-      document.getElementById(tabName).classList.add('active');
-    }
-  </script>
+    // Show the current tab, and add an "active" class to the button that opened the tab
+    document.getElementById(tabName).classList.add('active');
+  }
+</script>
 {% endblock %}
