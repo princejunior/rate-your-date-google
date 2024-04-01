@@ -15,7 +15,8 @@ class UserData:
         self.first_name = first_name
         self.email = email
         self.connections = connections or []
-        self.last_name = last_name
+        self.last_name = last_name,
+        self.messages = [] 
     
     def to_dict(self):
         # Convert UserData object to a dictionary

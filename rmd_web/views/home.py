@@ -119,6 +119,8 @@ def home(request):
         user_id = None
         context = {
             'user_information': user_id,
+            'friends':None,
+            
             'friend_posts': None,
             'friend_requests': None
         }

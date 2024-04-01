@@ -32,7 +32,9 @@ def user_profile(request):
         user_information = get_user_profile(user_id)
         current_user_data = UserData(**user_information)
         request.session['user_data'] = current_user_data.to_dict()  # Convert UserData to a dictionary
+        user_data = request.session['user_data']
         
+    print("request.session['user_data']", request.session['user_data'])
         
     
     # if current_user_data.is_empty():
@@ -46,10 +48,12 @@ def user_profile(request):
     #     # Handle the case when current_user_data is not empty
     #     pass  # You can add your logic here  
         
-    user_information = get_user_profile(user_id)
+    # user_information = get_user_profile(user_id)
     
     # profile_events = get_user_events(user_information['events'])
-    events, dates = get_user_events(user_information['events'])
+    # events, dates = get_user_events(user_information['events'])
+    events, dates = get_user_events(user_data.get_events())
+    
     if request.method == 'POST':
         print("Post button was clicked")
         

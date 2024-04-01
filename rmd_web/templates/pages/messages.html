@@ -65,9 +65,14 @@ Chat
         font-size: 16px;
     }
 </style>
+{% comment %} {{user_conversations}} {% endcomment %}
 <div class="sidebar" id="sidebar">
     <h2>Chats</h2>
     <ul id="chatList">
+        {% for other_user_id in chat_with_other_user_id %}
+            <li><a href="#" onclick="changeConversation('{{ other_user_id }}')">{{other_user_id}}</a></li>
+        {% endfor %}
+
         <!-- Sidebar tabs will be dynamically populated here -->
         <li><a href="#" onclick="changeConversation('user1')">User 1</a></li>
         <li><a href="#" onclick="changeConversation('user2')">User 2</a></li>
@@ -75,11 +80,19 @@ Chat
         <!-- Add more users dynamically or fetch from database -->
     </ul>
 </div>
+{% comment %} {{chat_with_other_user_id}} {% endcomment %}
 <div class="main-content">
     <div class="chat-container" id="chatContainer">
-        <!-- Chat messages will be dynamically populated here -->
-        <div class="message other">Hello!</div>
-        <div class="message">Hi there!</div>
+        {% for conversation in user_conversations %}
+            {% for message in conversation %}
+                {% if message.user_id == request.user.email %}
+                    <div class="message">{{ message.message }}</div>
+                {% else %}
+                    <div class="message other">{{ message.message }}</div>
+                {% endif %}    
+                    {% comment %} <li>{{ message.time_stamp }} - {{ message.user_id }}: {{ message.message }}</li> {% endcomment %}
+                {% endfor %}
+        {% endfor %}
     </div>
     <div class="message-input">
         <form action="{% url 'send_message' %}" method="post">
@@ -90,7 +103,7 @@ Chat
         </form>
     </div>
 </div>
-
+ 
 <script>
     function changeConversation(user) {
         // Fetch messages for the selected user (you need to implement this)

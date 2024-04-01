@@ -8,3 +8,4 @@ rmd_web/static/functions/__pycache__
 rmd_web/__pycache__
 fire/__pycache__
 fire/rate-my-date-fca52-cf894cb26c1d.json
+db.sqlite3
